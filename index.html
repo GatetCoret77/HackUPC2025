@@ -1,23 +1,98 @@
-<!doctype html>
-<!--[if lte IE 9]>
-<html lang="en" class="oldie">
-<![endif]-->
-<!--[if gt IE 9]><!-->
-<html lang="en">
-<!--<![endif]-->
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CSS Text Revealing Animation</title>
-  <link rel="stylesheet" media="all" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Interactivo Coche</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Optional: Include Roboto font if not already available -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 </head>
+
 <body>
-<div>Escape</div> 
-<div> 
-  <span>into amazing experiences</span>
-</div>
+
+    <!-- === HEADER (Siempre visible) === -->
+    <header class="cupra-header">
+        <div class="header-container">
+            <div class="logo-container">
+                <a href="/">
+                    <img src="Imatges/CupraLogo.jpg" alt="Cupra Logo">
+                </a>
+            </div>
+        </div>
+    </header>
+    <!-- === FIN HEADER === -->
+
+    <!-- === INTRO VIDEO CONTAINER (Permanecerá visible como fondo) === -->
+    <div id="intro-container">
+        <video id="intro-video" src="/Videos/tavascan.mp4" autoplay muted playsinline>
+            Tu navegador no soporta la etiqueta de video.
+        </video>
+        <button id="skip-intro-button">Skip Intro</button>
+    </div>
+    <!-- === FIN INTRO VIDEO CONTAINER === -->
+
+    <!-- === POST-INTRO SCREEN (Overlay sobre el video pausado) === -->
+    <div id="post-intro-screen" class="hidden">
+        <!-- Text Reveal Animation Structure -->
+        <div class="text-reveal-wrapper">
+            <div class="reveal-static">Welcome</div><div class="reveal-container">
+              <span class="reveal-sliding">to your Cupra Tavascan</span>
+            </div>
+        </div>
+        <!-- End Text Reveal -->
+        <button id="enter-button">Start</button> 
+    </div>
+    <!-- === FIN POST-INTRO SCREEN === -->
 
 
-<p>a css3 animation demo</p>
+    <!-- === MAIN CONTENT CONTAINER (Initially Hidden) === -->
+    <div id="main-content" class="hidden">
+
+        <!-- Título y Subtítulo -->
+        <h1>Manual Interactivo del Coche</h1>
+        <p class="subtitle">Haz clic en los puntos o pregúntale al gato.</p>
+
+        <!-- Área Interactiva del Coche -->
+        <div id="interactive-area">
+            <img id="car-image" src="Imatges/ImatgeCotxe.png" alt="Imagen del coche">
+            <div class="hotspot" id="hotspot-volante" data-title="Volante Multifunción"
+                data-info="Controla la dirección. Incluye botones para claxon, audio, teléfono y control de crucero (según modelo).">
+            </div>
+            <div class="hotspot" id="hotspot-pantalla" data-title="Pantalla Infoentretenimiento"
+                data-info="Acceso a navegación, radio, multimedia, ajustes del vehículo y conectividad (Bluetooth, Apple CarPlay/Android Auto).">
+            </div>
+            <div class="hotspot" id="hotspot-clima" data-title="Controles Climatizador"
+                data-info="Ajusta la temperatura, velocidad del ventilador, dirección del aire y activa el aire acondicionado (A/C) o la calefacción.">
+            </div>
+            <div class="hotspot" id="hotspot-emergencia" data-title="Luces de Emergencia"
+                data-info="Activa todas las luces intermitentes simultáneamente para señalizar una emergencia o detención peligrosa. Botón con triángulo rojo.">
+            </div>
+        </div>
+
+        <!-- Contenedor Gato Ayudante -->
+        <div id="cat-helper-container">
+            <div id="info-popup" class="hidden">
+                <button id="close-popup">×</button>
+                <h2 id="popup-title">Título</h2>
+                <p id="popup-info">Información...</p>
+            </div>
+            <img id="cat-helper-image" src="Imatges/Tavascat.png" alt="Gato ayudante">
+            <div id="cat-input-area">
+                <input type="text" id="cat-question-input" placeholder="Pregúntale al gato...">
+                <button id="ask-cat-button">Enviar</button>
+            </div>
+        </div>
+        <!-- FIN CONTENEDOR GATO -->
+
+    </div> <!-- === FIN MAIN CONTENT CONTAINER === -->
+
+
+    <!-- Script al final -->
+    <script src="script.js"></script>
 </body>
+
 </html>
