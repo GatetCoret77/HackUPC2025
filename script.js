@@ -1,86 +1,18 @@
-// CONCATENATED CODE - READ COMMENTS ABOVE REGARDING CONFLICTS
-
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- INTRO VIDEO & SCREEN LOGIC (From First Code) ---
+    // --- *** MERGED CODE *** ---
+
+    // --- 1. DOM ELEMENT SELECTIONS (Combined & Declared Once) ---
+    // Intro Elements
     const introContainer = document.getElementById('intro-container');
     const introVideo = document.getElementById('intro-video');
     const postIntroScreen = document.getElementById('post-intro-screen');
     const enterButton = document.getElementById('enter-button');
+    const skipIntroButton = document.getElementById('skip-intro-button');
     const mainContent = document.getElementById('main-content');
-    const skipIntroButton = document.getElementById('skip-intro-button'); // Get skip button
 
-    // --- Function to transition from video to post-intro screen ---
-    function transitionToPostIntro() {
-        // Pause the video (important for skip)
-        introVideo.pause();
-        // Hide the skip button itself
-        if (skipIntroButton) skipIntroButton.classList.add('hidden'); // Check if exists
-        // Show the overlay screen (post-intro)
-        if (postIntroScreen) postIntroScreen.classList.remove('hidden'); // Check if exists
-        // DO NOT hide introContainer here, it serves as background
-    }
-
-    // --- Function to show the main application content ---
-    function showMainContent() {
-        if (postIntroScreen) postIntroScreen.classList.add('hidden'); // Check if exists
-        if (introContainer) introContainer.classList.add('hidden'); // Hide video bg NOW
-        if (mainContent) mainContent.classList.remove('hidden'); // Check if exists
-        document.body.style.overflow = 'auto'; // Enable scrolling on main content
-    }
-
-    // --- Intro Event Listeners (Only add if elements exist) ---
-    if (introVideo) {
-        // Event: When the video ends NATURALLY
-        introVideo.addEventListener('ended', transitionToPostIntro);
-
-        // Opcional: If the video fails or cannot play
-        introVideo.addEventListener('error', (e) => {
-            console.error("Error loading/playing intro video:", e);
-            // Hide video container and skip button on error
-            if (introContainer) introContainer.classList.add('hidden');
-            if (skipIntroButton) skipIntroButton.classList.add('hidden');
-            // Show the post-intro screen directly with fallback background
-            if (postIntroScreen) {
-                 postIntroScreen.style.backgroundColor = '#404042'; // Ensure fallback bg
-                 postIntroScreen.classList.remove('hidden');
-            } else {
-                 // Fallback if even post-intro is missing: show main content directly
-                 console.warn("Post-intro screen not found, showing main content directly on video error.");
-                 showMainContent();
-            }
-        });
-    } else {
-         console.warn("Intro video element not found. Skipping intro logic.");
-         // If no video, assume we should show main content or post-intro directly
-         // Depending on your desired flow without video, you might call:
-         // showMainContent();
-         // or remove 'hidden' from postIntroScreen if that's the next step.
-         // For now, we'll assume main content should appear if intro fails completely.
-         if (mainContent) mainContent.classList.remove('hidden');
-         document.body.style.overflow = 'auto';
-         if (introContainer) introContainer.classList.add('hidden');
-         if (postIntroScreen) postIntroScreen.classList.add('hidden');
-         if (skipIntroButton) skipIntroButton.classList.add('hidden');
-
-    }
-
-    if (skipIntroButton) {
-        // Event: Clic on the "Skip Intro" button
-        skipIntroButton.addEventListener('click', transitionToPostIntro);
-    }
-
-    if (enterButton) {
-        // Event: Clic on the "Start" button (on post-intro screen)
-        enterButton.addEventListener('click', showMainContent);
-    }
-    // --- FIN INTRO LOGIC ---
-
-
-    // --- MERGED & REVISED CODE (Hotspots, Cat, Popup with Backend Logic from Second Code) ---
-
-    // --- Selecciones de Elementos (Declared only ONCE) ---
-    const hotspots = document.querySelectorAll('.hotspot');
+    // Main Interaction Elements (Cat, Popup, Hotspots)
+    const hotspots = document.querySelectorAll('.hotspot'); // Use querySelectorAll
     const popup = document.getElementById('info-popup');
     const popupTitle = document.getElementById('popup-title');
     const popupInfo = document.getElementById('popup-info');
@@ -88,46 +20,118 @@ document.addEventListener('DOMContentLoaded', () => {
     const catHelperImage = document.getElementById('cat-helper-image');
     const catQuestionInput = document.getElementById('cat-question-input');
     const askCatButton = document.getElementById('ask-cat-button');
-    const BACKEND_URL = 'http://127.0.0.1:5000/ask'; // URL of your Python backend (From Second Code)
+    const catContainer = document.getElementById('cat-helper-container'); // Potentially used by logic
 
-    // --- Frases aleatorias si se hace clic en el gato (From Second Code) ---
+    // --- 2. CONFIGURATION & LOCAL DATA ---
+
+    // !!! IMPORTANT: Choose the correct Backend URL for your setup !!!
+    // const BACKEND_URL = 'http://127.0.0.1:5000/ask'; // From First Code
+    const BACKEND_URL = 'http://localhost:3000/ask-ollama'; // From Second Code (using this one)
+
+    // Store hotspot info locally (From Second Code)
+    const hotspotData = {};
+    if (hotspots) {
+        hotspots.forEach(hotspot => {
+            // Use hotspot.id or another unique identifier if available and preferred
+            const id = hotspot.id || hotspot.dataset.title; // Fallback to title if no id
+            if (id) {
+                 hotspotData[id] = {
+                    title: hotspot.dataset.title || "Info", // Default title
+                    info: hotspot.dataset.info || "No details available." // Default info
+                };
+            } else {
+                console.warn("Hotspot found without id or data-title, cannot store data:", hotspot);
+            }
+        });
+    }
+
+    // Basic local responses (From Second Code)
+    const basicResponses = {
+        'hola': "¡Miau! Hola. ¿En qué puedo ayudarte con el coche?",
+        'adios': "¡Miau! Hasta luego.",
+        'gracias': "¡De nada! Siempre es un placer ayudar. Miau.",
+        'ayuda': "Puedes preguntarme sobre el coche (volante, pantalla, etc.) o hacer clic en los puntos naranjas. También respondo a 'hola', 'gracias', etc. Miau!",
+        'como estas': "¡Genial! Listo para ayudarte con el coche. Miau.",
+        'que haces': "Estoy consultando mi información para ayudarte. Pregúntame algo. Miau!",
+        'miau': "¡Miau! ¿Decías?"
+        // Add more simple keywords/responses here
+    };
+
+    // Random phrases for clicking the cat (From Second Code)
     const catClickPhrases = [
-        "¿En qué puedo ayudarte con el Tavascan?",
-        "¡Miau! Pregúntame sobre el manual.",
-        "Puedo intentar buscar información en el manual...",
-        "Escribe tu pregunta y pulsa Enviar.",
+        "¿En qué puedo ayudarte?",
+        "¡Hey! ¿Qué tal?",
+        "Pregúntame algo sobre el coche...",
+        "Haz clic en los puntos naranjas para info rápida.",
         "Miau."
     ];
 
-    // --- Funciones (Using versions from Second Code for Backend interaction) ---
 
-    // Función para mostrar el popup
+    // --- 3. FUNCTIONS ---
+
+    // --- Intro Transition Functions (From First Code, with checks) ---
+    function transitionToPostIntro() {
+        if (introVideo) introVideo.pause();
+        if (skipIntroButton) skipIntroButton.classList.add('hidden');
+        if (postIntroScreen) postIntroScreen.classList.remove('hidden');
+        // Do NOT hide introContainer here initially, it acts as background
+    }
+
+    function showMainContent() {
+        if (postIntroScreen) postIntroScreen.classList.add('hidden');
+        if (introContainer) introContainer.classList.add('hidden'); // Hide video bg NOW
+        if (mainContent) mainContent.classList.remove('hidden');
+        document.body.style.overflow = 'auto'; // Enable scrolling
+    }
+
+    // --- Popup Functions (From Second Code, handles loading class) ---
     function showPopup(title, info) {
-        if (!popup || !popupTitle || !popupInfo) return; // Guard clause
+        if (!popup || !popupTitle || !popupInfo) return;
         popupTitle.textContent = title;
-        popupInfo.textContent = info; // Display the raw text
+        popupInfo.textContent = info;
+        popupInfo.classList.remove('loading'); // Ensure loading state is cleared
         popup.classList.remove('hidden');
     }
 
-    // Función para ocultar el popup
     function hidePopup() {
-        if (!popup) return; // Guard clause
+        if (!popup) return;
         popup.classList.add('hidden');
     }
 
-    // Función para procesar la pregunta via Backend (From Second Code)
+    // --- Backend Interaction Function (From Second Code - Ollama logic) ---
     async function processQuestion() {
-        if (!catQuestionInput || !askCatButton) return; // Guard clause
+        if (!catQuestionInput || !askCatButton || !popup) return; // Check required elements
 
         const question = catQuestionInput.value.trim();
-        if (!question) return; // No hacer nada si está vacío
+        if (!question) return; // Do nothing if empty
 
-        // Show loading state (updated message)
-        showPopup("Tavascat Consultando...", "Buscando en el manual y pensando, miau...");
-        askCatButton.disabled = true; // Disable button while processing
+        const lowerQ = question.toLowerCase();
+        let handledLocally = false;
+
+        // 1. Check for basic local responses first
+        for (const keyword in basicResponses) {
+            // Match if the question *is* the keyword, or starts/ends with it (basic check)
+             if (lowerQ === keyword || lowerQ.startsWith(keyword + ' ') || lowerQ.endsWith(' ' + keyword) || lowerQ.includes(' ' + keyword + ' ')) {
+                showPopup("Gato Ayudante", basicResponses[keyword]);
+                handledLocally = true;
+                break;
+            }
+        }
+
+        if (handledLocally) {
+            catQuestionInput.value = ''; // Clear input
+            catQuestionInput.focus();
+            return; // Don't proceed to backend
+        }
+
+        // 2. If not basic, send to backend
+        showPopup("Gato Ayudante", "Miau... Pensando..."); // Show loading state
+        if (popupInfo) popupInfo.classList.add('loading'); // Add visual indicator
+        askCatButton.disabled = true;
         catQuestionInput.disabled = true;
 
         try {
+            console.log(`Sending to backend (${BACKEND_URL}): ${question}`);
             const response = await fetch(BACKEND_URL, {
                 method: 'POST',
                 headers: {
@@ -136,52 +140,107 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ question: question }),
             });
 
+            // Improved error handling from backend response
             if (!response.ok) {
-                // Try to get error message from backend if available
-                let errorMsg = `Error del servidor: ${response.status}`;
+                let errorMsg = `Miau! Error ${response.status}. No pude conectar con mi cerebro...`;
                 try {
                     const errorData = await response.json();
-                    errorMsg = errorData.error || errorData.answer || errorMsg; // Use 'answer' field too for potential error messages from backend
+                    errorMsg = errorData.error || errorData.answer || errorMsg; // Use backend message if available
+                    console.error("Backend error response:", errorData);
                 } catch (e) {
-                    // Ignore if response is not JSON
+                     console.error("Could not parse error response from backend.");
+                     // Optionally try to read response as text for debugging
+                     const textError = await response.text();
+                     console.error("Backend error response (text):", textError);
+                     errorMsg += ` Server response: ${response.statusText || 'Unknown'}`;
                 }
+                 // Add a check for specific statuses if needed
+                 if (response.status === 404) errorMsg += " Endpoint no encontrado.";
+                 if (response.status === 500) errorMsg += " Problema interno del servidor.";
+
                 throw new Error(errorMsg);
             }
 
             const data = await response.json();
-            showPopup("Tavascat Responde", data.answer); // Display backend's answer
+            console.log(`Received from backend:`, data);
+            showPopup("Gato Ayudante", data.answer || "Miau... No recibí una respuesta clara."); // Display backend's answer
 
         } catch (error) {
-            console.error('Error:', error);
-            showPopup("Error", `Miau! Hubo un problema: ${error.message}`);
+            console.error('Error asking cat:', error);
+            // Show specific error message thrown or a generic one
+            showPopup("Error", error.message || "Miau! Hubo un problema al procesar tu pregunta.");
         } finally {
-            // Re-enable input/button
+            // Re-enable input/button and clear input
             askCatButton.disabled = false;
             catQuestionInput.disabled = false;
-            catQuestionInput.value = ''; // Clear input after processing
-            catQuestionInput.focus(); // Set focus back to input
+            if (popupInfo) popupInfo.classList.remove('loading'); // Remove visual indicator
+            catQuestionInput.value = '';
+            catQuestionInput.focus();
         }
     }
 
-    // --- Event Listeners (Using logic from Second Code where conflicts existed) ---
 
-    // Clic en Hotspots (Shows a generic message - From Second Code)
+    // --- 4. EVENT LISTENERS ---
+
+    // --- Intro Event Listeners (From First Code, with checks) ---
+    if (introVideo) {
+        introVideo.addEventListener('ended', transitionToPostIntro);
+        introVideo.addEventListener('error', (e) => {
+            console.error("Error loading/playing intro video:", e);
+            // Fallback: Hide intro elements, try showing post-intro or main content
+            if (introContainer) introContainer.classList.add('hidden');
+            if (skipIntroButton) skipIntroButton.classList.add('hidden');
+            if (postIntroScreen) {
+                 postIntroScreen.style.backgroundColor = '#404042'; // Fallback background
+                 postIntroScreen.classList.remove('hidden');
+            } else {
+                 console.warn("Post-intro screen not found, showing main content directly on video error.");
+                 showMainContent(); // Show main content if post-intro also fails
+            }
+        });
+    } else {
+         // If no intro video element exists at all, skip straight to main content
+         console.warn("Intro video element not found. Skipping intro.");
+         showMainContent();
+         // Ensure other intro elements are hidden if they somehow exist
+         if (introContainer) introContainer.classList.add('hidden');
+         if (postIntroScreen) postIntroScreen.classList.add('hidden');
+         if (skipIntroButton) skipIntroButton.classList.add('hidden');
+    }
+
+    if (skipIntroButton) {
+        skipIntroButton.addEventListener('click', transitionToPostIntro);
+    }
+
+    if (enterButton) {
+        enterButton.addEventListener('click', showMainContent);
+    }
+
+    // --- Main Interaction Event Listeners (Using Logic from Second Code) ---
+
+    // Hotspot Clicks (Show local data from hotspotData)
     if (hotspots) {
         hotspots.forEach(hotspot => {
             hotspot.addEventListener('click', () => {
-                // Check if data attributes exist before showing popup
-                const title = hotspot.dataset.title || "Información";
-                showPopup(title, "Puedes preguntarme sobre esto escribiendo en la caja de chat. Miau.");
+                 const id = hotspot.id || hotspot.dataset.title; // Get the same ID used to store data
+                const data = hotspotData[id];
+                if (data) {
+                    showPopup(data.title, data.info);
+                } else {
+                    // Fallback if data wasn't stored correctly
+                    showPopup(hotspot.dataset.title || "Info", "Details not found for this hotspot.");
+                    console.warn("Could not find stored data for hotspot:", hotspot);
+                }
             });
         });
     }
 
-    // Clic en Botón de Cerrar Popup
+    // Popup Close Button Click
     if (closeButton) {
         closeButton.addEventListener('click', hidePopup);
     }
 
-    // Clic en la Imagen del Gato (muestra frase aleatoria simple - From Second Code)
+    // Cat Image Click (Show random phrase)
     if (catHelperImage) {
         catHelperImage.addEventListener('click', () => {
             const randomIndex = Math.floor(Math.random() * catClickPhrases.length);
@@ -189,50 +248,55 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Clic en el Botón "Enviar" (Calls backend processQuestion - From Second Code)
+    // Ask Button Click (Process question via backend)
     if (askCatButton) {
         askCatButton.addEventListener('click', processQuestion);
     }
 
-    // Presionar Enter en el campo de input (Calls backend processQuestion - From Second Code)
+    // Enter Key in Input Field (Process question via backend)
     if (catQuestionInput) {
         catQuestionInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
-                event.preventDefault(); // Evita el comportamiento por defecto (si lo hubiera)
+                event.preventDefault(); // Prevent default form submission (if applicable)
                 processQuestion();
             }
         });
     }
 
-    // Opcional: Cerrar popup al hacer clic fuera del contenido (From Second Code)
+    // Click Outside Popup to Close (Simpler version from Second Code)
     if (popup) {
         popup.addEventListener('click', (event) => {
-            // Verifica que el clic fue directamente en el fondo del popup, no en sus hijos
+            // Close only if the click is directly on the popup background (event.target)
+            // not on its children (content area, title, close button etc.)
             if (event.target === popup) {
                 hidePopup();
             }
         });
     }
 
-    // Listener from first code to close popup on outside click (might be redundant with the above)
-    // Keeping it just in case, but might need review depending on exact HTML structure
-    document.addEventListener('click', (event) => {
-         const catContainer = document.getElementById('cat-helper-container');
-         // Only hide if popup exists, is visible, wasn't clicked inside, and cat container exists and wasn't clicked inside
-         if (popup && !popup.classList.contains('hidden') && !popup.contains(event.target) && catContainer && !catContainer.contains(event.target)) {
-              // Also make sure the click wasn't on a hotspot itself
-              let isHotspotClick = false;
-              if (hotspots) {
-                  hotspots.forEach(hs => {
-                      if (hs.contains(event.target)) {
-                          isHotspotClick = true;
-                      }
-                  });
-              }
-              if (!isHotspotClick) {
-                  hidePopup();
-              }
-         }
-     });
 
-}); // Fin del DOMContentLoaded
+    // --- 5. STYLING (For Loading Indicator - From Second Code) ---
+    const style = document.createElement('style');
+    style.textContent = `
+        #popup-info.loading::after {
+            content: ' ';
+            display: inline-block;
+            width: 0.8em; /* Adjusted size slightly */
+            height: 0.8em; /* Adjusted size slightly */
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            border-top-color: #333; /* Spinner color */
+            animation: spin 1s linear infinite;
+            margin-left: 8px; /* Spacing */
+            vertical-align: middle;
+            box-sizing: border-box; /* Include border in size */
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // --- END OF MERGED CODE ---
+
+}); // End of DOMContentLoaded
