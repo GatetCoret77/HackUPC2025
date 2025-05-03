@@ -7,112 +7,89 @@ document.addEventListener('DOMContentLoaded', () => {
     const popupInfo = document.getElementById('popup-info');
     const closeButton = document.getElementById('close-popup');
     const catHelperImage = document.getElementById('cat-helper-image');
-    const catQuestionInput = document.getElementById('cat-question-input'); // NUEVO
-    const askCatButton = document.getElementById('ask-cat-button');       // NUEVO
-    // const manualLink = document.getElementById('popup-manual-link');
+    const catQuestionInput = document.getElementById('cat-question-input');
+    const askCatButton = document.getElementById('ask-cat-button');
+    const BACKEND_URL = 'http://127.0.0.1:5000/ask'; // URL of your Python backend
 
-    // --- Datos para la "IA" del Gato ---
-
-    // 1. Palabras clave asociadas a los hotspots (ID -> [keywords])
-    const hotspotKeywords = {
-        'hotspot-volante': ['volante', 'dirección', 'girar', 'claxon', 'pito', 'botones volante', 'control crucero'],
-        'hotspot-pantalla': ['pantalla', 'infoentretenimiento', 'navegador', 'gps', 'mapa', 'radio', 'musica', 'multimedia', 'bluetooth', 'conectar movil', 'apple carplay', 'android auto'],
-        'hotspot-clima': ['clima', 'aire', 'acondicionado', 'calefaccion', 'temperatura', 'ventilador', 'frio', 'calor'],
-        'hotspot-emergencia': ['emergencia', 'warning', 'peligro', 'intermitentes', 'luces emergencia', 'triangulo rojo']
-        // Añade más IDs y keywords si tienes más hotspots
-    };
-
-    // 2. Respuestas básicas del gato (keyword -> response)
-    const basicResponses = {
-        'hola': "¡Miau! Hola. ¿Qué quieres saber sobre el coche?",
-        'adios': "¡Miau! Hasta luego.",
-        'gracias': "¡De nada! Siempre es un placer ayudar. Miau.",
-        'ayuda': "Puedes preguntarme sobre partes como 'volante', 'pantalla', 'clima', 'luces de emergencia' o hacer clic en los puntos naranjas. También respondo a 'hola' y 'gracias'.",
-        'como estas': "¡Genial! Listo para ayudarte con el coche. Miau.",
-        'que haces': "Estoy aquí para darte información sobre este coche Cupra. Pregúntame algo.",
-        'miau': "¡Miau! ¿Decías?"
-        // Añade más interacciones básicas
-    };
-
-    // 3. Frases aleatorias si se hace clic en el gato (como antes)
+    // --- Frases aleatorias si se hace clic en el gato ---
     const catClickPhrases = [
-        "¿En qué puedo ayudarte?",
-        "¡Hey! ¿Qué tal?",
-        "Pregúntame algo sobre el coche...",
-        "Haz clic en los puntos naranjas para info rápida.",
+        "¿En qué puedo ayudarte con el Tavascan?",
+        "¡Miau! Pregúntame sobre el manual.",
+        "Puedo intentar buscar información en el manual...",
+        "Escribe tu pregunta y pulsa Enviar.",
         "Miau."
     ];
 
     // --- Funciones ---
 
-    // Función para mostrar el popup (sin cambios internos)
+    // Función para mostrar el popup
     function showPopup(title, info) {
         popupTitle.textContent = title;
-        popupInfo.textContent = info;
+        popupInfo.textContent = info; // Display the raw text
         popup.classList.remove('hidden');
-        // Lógica del enlace al manual (si la hubiera)
     }
 
-    // Función para ocultar el popup (sin cambios)
+    // Función para ocultar el popup
     function hidePopup() {
         popup.classList.add('hidden');
     }
 
-    // NUEVO: Función para procesar la pregunta del usuario
-    function processQuestion() {
-        const question = catQuestionInput.value.trim().toLowerCase();
+    // Función para procesar la pregunta via Backend
+    async function processQuestion() {
+        const question = catQuestionInput.value.trim();
         if (!question) return; // No hacer nada si está vacío
 
-        let foundResponse = false;
+        // Show loading state (updated message)
+        showPopup("Tavascat Consultando...", "Buscando en el manual y pensando, miau...");
+        askCatButton.disabled = true; // Disable button while processing
+        catQuestionInput.disabled = true;
 
-        // 1. Buscar keywords de hotspots
-        for (const hotspotId in hotspotKeywords) {
-            const keywords = hotspotKeywords[hotspotId];
-            for (const keyword of keywords) {
-                // Usamos includes() para buscar la palabra clave dentro de la pregunta
-                if (question.includes(keyword)) {
-                    const hotspotElement = document.getElementById(hotspotId);
-                    if (hotspotElement) {
-                        showPopup(hotspotElement.dataset.title, hotspotElement.dataset.info);
-                        foundResponse = true;
-                        break; // Salir del bucle de keywords para este hotspot
-                    }
+        try {
+            const response = await fetch(BACKEND_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ question: question }),
+            });
+
+            if (!response.ok) {
+                // Try to get error message from backend if available
+                let errorMsg = `Error del servidor: ${response.status}`;
+                try {
+                    const errorData = await response.json();
+                    errorMsg = errorData.error || errorData.answer || errorMsg; // Use 'answer' field too for potential error messages from backend
+                } catch (e) {
+                    // Ignore if response is not JSON
                 }
+                throw new Error(errorMsg);
             }
-            if (foundResponse) break; // Salir del bucle de hotspots
-        }
 
-        // 2. Si no se encontró keyword de hotspot, buscar respuestas básicas
-        if (!foundResponse) {
-            for (const basicKeyword in basicResponses) {
-                if (question.includes(basicKeyword)) {
-                    showPopup("Gato Ayudante", basicResponses[basicKeyword]);
-                    foundResponse = true;
-                    break; // Salir del bucle de respuestas básicas
-                }
-            }
-        }
+            const data = await response.json();
+            showPopup("Tavascat Responde", data.answer); // Display backend's answer
 
-        // 3. Si no se encontró nada, respuesta por defecto
-        if (!foundResponse) {
-            showPopup("Gato Ayudante", "Miau... No estoy seguro de entender eso. Intenta preguntarme por 'volante', 'pantalla', 'clima', 'emergencia' o pide 'ayuda'.");
+        } catch (error) {
+            console.error('Error:', error);
+            showPopup("Error", `Miau! Hubo un problema: ${error.message}`);
+        } finally {
+            // Re-enable input/button
+            askCatButton.disabled = false;
+            catQuestionInput.disabled = false;
+            catQuestionInput.value = ''; // Clear input after processing
+            catQuestionInput.focus(); // Set focus back to input
         }
-
-        // Limpiar el input después de procesar
-        catQuestionInput.value = '';
     }
-
 
     // --- Event Listeners ---
 
-    // Clic en Hotspots (sin cambios)
+    // Clic en Hotspots (Shows a generic message)
     hotspots.forEach(hotspot => {
         hotspot.addEventListener('click', () => {
-            showPopup(hotspot.dataset.title, hotspot.dataset.info);
+            showPopup(hotspot.dataset.title, "Puedes preguntarme sobre esto escribiendo en la caja de chat. Miau.");
         });
     });
 
-    // Clic en Botón de Cerrar Popup (sin cambios)
+    // Clic en Botón de Cerrar Popup
     closeButton.addEventListener('click', hidePopup);
 
     // Clic en la Imagen del Gato (muestra frase aleatoria simple)
@@ -121,10 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
         showPopup("Gato Ayudante", catClickPhrases[randomIndex]);
     });
 
-    // NUEVO: Clic en el Botón "Enviar"
+    // Clic en el Botón "Enviar"
     askCatButton.addEventListener('click', processQuestion);
 
-    // NUEVO: Presionar Enter en el campo de input
+    // Presionar Enter en el campo de input
     catQuestionInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
             event.preventDefault(); // Evita el comportamiento por defecto (si lo hubiera)
@@ -132,11 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Opcional: Cerrar popup al hacer clic fuera (sin cambios, debería seguir funcionando)
+    // Opcional: Cerrar popup al hacer clic fuera del contenido
     popup.addEventListener('click', (event) => {
-        if (event.target === popup) {
-            hidePopup();
-        }
-    });
+         // Verifica que el clic fue directamente en el fondo del popup, no en sus hijos (título, p, botón)
+         if (event.target === popup) {
+              hidePopup();
+         }
+     });
 
 });
