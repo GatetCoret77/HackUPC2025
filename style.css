@@ -45,8 +45,52 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
     width: 100%;
     z-index: 1000; /* Encima de todo */
 }
-.header-container { display: flex; justify-content: space-between; align-items: center; height: 100%; max-width: 1400px; margin: 0 auto; }
+.header-container {
+    display: flex;
+    justify-content: space-between; /* Keeps logo left, buttons right */
+    align-items: center;
+    height: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
 .logo-container img { height: 35px; }
+
+/* **** START: NEW HEADER BUTTON STYLES **** */
+.header-nav-buttons {
+    display: flex; /* Arrange buttons horizontally */
+    gap: 20px;     /* Space between buttons */
+}
+
+.header-nav-button { /*Color texto boton*/
+    color: #cccccc; /* Slightly muted color for non-active */
+    font-size: 0.95em;
+    font-weight: 600;
+    padding: 8px 15px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border: 1px solid transparent; /* Reserve space for potential border */
+    /* Inherit necessary properties from button reset or base styles */
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.header-nav-button:hover { /*color lletra al clicar*/
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle background on hover */
+}
+
+.header-nav-button.active-view {
+    color: #000000; /* Black text for contrast */
+    background-color: #B46544; /* Cupra accent color for active */
+    /* border: 1px solid #B46544; */ /* Optional border */
+}
+
+.header-nav-button.active-view:hover {
+    background-color: #c97a56; /* Slightly lighter accent on hover for active */
+}
+/* **** END: NEW HEADER BUTTON STYLES **** */
+
 /* --- FIN ESTILOS HEADER --- */
 
 
@@ -76,9 +120,8 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
 
 /* --- Skip Intro Button Style (Positioning removed) --- */
 #skip-intro-button {
-    /* position, bottom, right, z-index MOVED to #skip-controls-container */
     background-color: rgba(0, 0, 0, 0.5);
-    color: #ffffff;
+    color: #B46544;
     border: 1px solid rgba(255, 255, 255, 0.7);
     padding: 8px 15px;
     border-radius: 20px;
@@ -119,6 +162,20 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
     transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
+.postintro-subtext {
+    font-family: 'Poppins', sans-serif; /* Or your preferred font */
+    font-size: 1.9em;      /* Adjust size as needed */
+    color: #dddddd;        /* Slightly off-white, or #ffffff */
+    margin-top: 0;         /* Reset top margin if wrapper has enough */
+    margin-bottom: 35px;   /* Space before the buttons */
+    font-weight: 400;      /* Regular weight */
+    line-height: 1.5;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Optional subtle shadow */
+    opacity: 0; /* Start hidden for animation */
+    /* Animate slightly after the main text reveal (adjust delay) */
+    animation: fadein-subtext 1s ease-out 2.2s 1 forwards;
+}
+
 /* --- Text Reveal Animation Styles --- */
 .text-reveal-wrapper {
     text-align: center;
@@ -151,7 +208,23 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
   animation: slidein-once 2s ease-out 0.5s 1 forwards;
 }
 
+
 /* --- Keyframes (Adapted) --- */
+
+@keyframes fadein-subtext {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+/* --- End of added keyframes --- */
+
+
+/* --- Keyframes for button fade-in --- */
+@keyframes fadein-button {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+
 @keyframes showup-once {
     0% {opacity:0;}
     30% {opacity:1;}
@@ -174,31 +247,41 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
 /* --- End Text Reveal Animation Styles --- */
 
 
-#enter-button {
-    background-color: #FF8C00;
+/* --- NEW Container for Post-Intro Buttons --- */
+.postintro-button-container {
+    display: flex;          /* Arrange buttons horizontally */
+    justify-content: center; /* Center buttons horizontally */
+    gap: 120px;              /* Space BETWEEN the buttons */
+    width: 100%;            /* Take available width */
+    margin-top: 10px;       /* Optional space below text animation */
+}
+
+/* --- Style applied to BOTH buttons using the CLASS --- */
+.start-button-postintro { /* Changed selector from #enter-button to .start-button-postintro */
+    background-color: #B46544;
     color: white;
     padding: 15px 40px;
-    border-radius: 30px;
+    border-radius: 10px; /* Your existing radius */
     font-size: 1.2em;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    border: 2px solid #FF8C00;
+    border: none; /* Example: Removing border */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     opacity: 0;
     animation: fadein-button 1s ease-out 2.5s 1 forwards;
+    min-width: 150px; /* Ensure buttons have a decent minimum width */
+    text-align: center;
 }
 
-#enter-button:hover {
+.start-button-postintro:hover { /* Changed selector */
     background-color: #FFA500;
-    border-color: #FFA500;
     transform: scale(1.05);
 }
 
-@keyframes fadein-button {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
+/* --- Keyframes for button fade-in --- */
+/* (Redundant keyframes removed, keep only one definition) */
+/* @keyframes fadein-button defined earlier is sufficient */
 
 
 /* Clase para ocultar elementos */
@@ -214,14 +297,75 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
 /* --- ESTILOS CONTENIDO PRINCIPAL (dentro de #main-content) --- */
 #main-content {
     transition: opacity 0.5s ease; /* Fade in effect */
+    /* Added padding-bottom to make space for the fixed cat helper */
+    padding-bottom: 120px; /* Adjust if needed */
 }
-#main-content h1 { font-weight: 700; text-align: center; margin-top: 20px; margin-bottom: 5px; color: #ffffff; }
-#main-content .subtitle { text-align: center; margin-bottom: 30px; font-size: 0.9em; color: #cccccc; }
-#interactive-area { position: relative; max-width: 800px; width: 90%; margin: 20px auto; overflow: hidden; background-color: #404042; }
-#car-image { display: block; width: 100%; }
+#main-content h1 {
+    font-weight: 700;
+    text-align: center;
+    margin-top: 20px; /* Reduced top margin if video is added */
+    margin-bottom: 15px; /* Space between title and video */
+    color: #ffffff;
+}
+
+/* --- NEW: Exterior Video Styles --- */
+#exterior-video-container {
+    max-width: 800px; /* Or match interactive area width */
+    width: 90%;       /* Responsive width */
+    /* ** MODIFIED MARGIN BELOW ** */
+    /* Was: margin: 0 auto 20px auto; */
+    margin: 50px auto 20px auto; /* Increased top margin to 50px */
+    background-color: #000; /* Optional: Black background for letterboxing if needed */
+    border-radius: 8px; /* Optional: Rounded corners */
+    overflow: hidden;  /* Ensure video stays within rounded corners */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); /* Optional subtle shadow */
+    position: relative;
+    z-index: 1; /* Above general background, below popups/hotspots if needed */
+}
+
+#exterior-video-container video {
+    display: block; /* Remove extra space below video */
+    width: 100%;
+    height: auto;   /* Maintain aspect ratio */
+    border-radius: 8px; /* Match container if container has no background */
+    pointer-events: none; /* Prevent clicks/interaction */
+}
+/* --- END: Exterior Video Styles --- */
+
+/* Also adjust the title's bottom margin if needed, though the above might be enough */
+#main-content h1 {
+    font-weight: 700;
+    text-align: center;
+    margin-top: 20px;
+    /* You could slightly reduce this if the video's top margin is large */
+    margin-bottom: 15px; /* Or keep this and rely solely on video's top margin */
+    color: #ffffff;
+}
+
+/* Adjust subtitle top margin if necessary */
+#main-content .subtitle {
+    text-align: center;
+    /* Top margin depends on space needed after video */
+    margin-top: 0; /* Was already 0, likely fine */
+    margin-bottom: 30px;
+    font-size: 0.9em;
+    color: #cccccc;
+}
+
+#interactive-area {
+    position: relative;
+    max-width: 800px;
+    width: 90%;
+    margin: 20px auto;
+    overflow: hidden;
+    background-color: #404042; /* Same as body or slightly different */
+    border-radius: 8px; /* Optional: Consistency */
+}
+#car-image { display: block; width: 100%; border-radius: 8px; /* Match container */}
+
 .hotspot { position: absolute; width: 20px; height: 20px; background-color: #FF8C00; border-radius: 50%; border: 2px solid white; cursor: pointer; transition: transform 0.2s ease, background-color 0.2s ease; box-shadow: 0 0 8px rgba(255, 140, 0, 0.7); }
 .hotspot:hover { transform: scale(1.3); background-color: #FFA500; }
-#hotspot-volante { top: 55%; left: 28%; }
+#hotspot-socket { top: 40%; left: 75%; }
 #hotspot-pantalla { top: 45%; left: 48%; }
 #hotspot-clima { top: 65%; left: 50%; transform: translateX(-50%); }
 #hotspot-emergencia { top: 52%; left: 60%; }

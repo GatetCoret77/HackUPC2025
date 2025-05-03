@@ -1,21 +1,22 @@
-// FINAL COMBINED AND CORRECTED SCRIPT for the provided HTML structure
+// FINAL SCRIPT for the provided HTML structure
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- *** MERGED CODE *** ---
+    // --- 1. DOM ELEMENT SELECTIONS ---
+    // Header
+    const headerContainer = document.querySelector('.header-container'); // Select header container
 
-    // --- 1. DOM ELEMENT SELECTIONS (Combined & Declared Once) ---
     // Intro Elements
     const introContainer = document.getElementById('intro-container');
     const introVideo = document.getElementById('intro-video');
     const postIntroScreen = document.getElementById('post-intro-screen');
-    const enterButton = document.getElementById('enter-button');
-    const skipIntroButton = document.getElementById('skip-intro-button'); // Needed for click listener
-    const skipControlsContainer = document.getElementById('skip-controls-container'); // **** Added for container logic ****
+    const exploreButton = document.getElementById('start-button-left');
+    const skipIntroButton = document.getElementById('skip-intro-button');
+    const skipControlsContainer = document.getElementById('skip-controls-container');
     const mainContent = document.getElementById('main-content');
 
     // Main Interaction Elements (Cat, Popup, Hotspots)
-    const hotspots = document.querySelectorAll('.hotspot'); // Use querySelectorAll
+    const hotspots = document.querySelectorAll('.hotspot');
     const popup = document.getElementById('info-popup');
     const popupTitle = document.getElementById('popup-title');
     const popupInfo = document.getElementById('popup-info');
@@ -23,15 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const catHelperImage = document.getElementById('cat-helper-image');
     const catQuestionInput = document.getElementById('cat-question-input');
     const askCatButton = document.getElementById('ask-cat-button');
-    const catContainer = document.getElementById('cat-helper-container'); // Potentially used by logic
 
     // --- 2. CONFIGURATION & LOCAL DATA ---
 
-    // !!! IMPORTANT: Choose the correct Backend URL for your setup !!!
-    // const BACKEND_URL = 'http://127.0.0.1:5000/ask'; // Example 1
-    const BACKEND_URL = 'http://localhost:3000/ask-ollama'; // Example 2 (Using this one based on your second code block)
+    const BACKEND_URL = 'http://localhost:3000/ask-ollama';
 
-    // Store hotspot info locally
     const hotspotData = {};
     if (hotspots) {
         hotspots.forEach(hotspot => {
@@ -47,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Basic local responses
     const basicResponses = {
         'hola': "¡Miau! Hola. ¿En qué puedo ayudarte con el coche?",
         'adios': "¡Miau! Hasta luego.",
@@ -58,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'miau': "¡Miau! ¿Decías?"
     };
 
-    // Random phrases for clicking the cat
     const catClickPhrases = [
         "¿En qué puedo ayudarte?",
         "¡Hey! ¿Qué tal?",
@@ -72,22 +67,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Intro Transition Functions ---
     function transitionToPostIntro() {
-        // Check if already transitioned
-        if (postIntroScreen && !postIntroScreen.classList.contains('hidden')) {
-             console.log("Transition to post-intro already happened.");
-             return;
+        // Check if already on post-intro OR main content is visible
+        const isMainContentVisible = mainContent && !mainContent.classList.contains('hidden');
+        if ((postIntroScreen && !postIntroScreen.classList.contains('hidden')) || isMainContentVisible) {
+            console.log("Transition to post-intro/main content already happened or in progress.");
+            return;
         }
         console.log("Transitioning to post-intro screen...");
 
         if (introVideo) introVideo.pause();
-        // Hide the entire skip controls container (button + hint)
-        if (skipControlsContainer) skipControlsContainer.classList.add('hidden'); // **** CORRECTED ****
+        if (skipControlsContainer) skipControlsContainer.classList.add('hidden');
         if (postIntroScreen) postIntroScreen.classList.remove('hidden');
-        // Do NOT hide introContainer here initially, it acts as background
+        // introContainer remains visible as background until main content is shown
     }
 
     function showMainContent() {
         console.log("Showing main content...");
+
+        // --- START: Add Header Buttons ---
+        // Check if the buttons container already exists to prevent adding them multiple times
+        if (headerContainer && !headerContainer.querySelector('.header-nav-buttons')) {
+            console.log("Adding header navigation buttons...");
+            const navButtonsContainer = document.createElement('div');
+            navButtonsContainer.className = 'header-nav-buttons';
+
+            const exteriorButton = document.createElement('button');
+            exteriorButton.className = 'header-nav-button';
+            exteriorButton.textContent = 'Exterior';
+            // Add event listener if needed later: exteriorButton.addEventListener('click', () => { /* handle exterior click */ });
+
+            const interiorButton = document.createElement('button');
+            interiorButton.className = 'header-nav-button active-view'; // Start with Interior active
+            interiorButton.textContent = 'Interior';
+             // Add event listener if needed later: interiorButton.addEventListener('click', () => { /* handle interior click */ });
+
+            navButtonsContainer.appendChild(exteriorButton);
+            navButtonsContainer.appendChild(interiorButton);
+
+            headerContainer.appendChild(navButtonsContainer);
+        }
+        // --- END: Add Header Buttons ---
+
         if (postIntroScreen) postIntroScreen.classList.add('hidden');
         if (introContainer) introContainer.classList.add('hidden'); // Hide video bg NOW
         if (mainContent) mainContent.classList.remove('hidden');
@@ -155,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error("Backend error response:", errorData);
                 } catch (e) {
                      console.error("Could not parse error response from backend.");
-                     const textError = await response.text().catch(() => "Could not read text response"); // Prevent double error
+                     const textError = await response.text().catch(() => "Could not read text response");
                      console.error("Backend error response (text):", textError);
                      errorMsg += ` Server response: ${response.statusText || 'Unknown'}`;
                 }
@@ -188,47 +208,57 @@ document.addEventListener('DOMContentLoaded', () => {
         introVideo.addEventListener('ended', transitionToPostIntro);
         introVideo.addEventListener('error', (e) => {
             console.error("Error loading/playing intro video:", e);
-            if (introContainer) introContainer.classList.add('hidden');
-            // Hide skip controls container on error
-            if (skipControlsContainer) skipControlsContainer.classList.add('hidden'); // **** CORRECTED ****
+             // Decide how to handle video error: show post-intro or main content?
+             // Option 1: Show post-intro with fallback background
+            if (introContainer) introContainer.classList.add('hidden'); // Hide broken video area
+            if (skipControlsContainer) skipControlsContainer.classList.add('hidden');
             if (postIntroScreen) {
-                 postIntroScreen.style.backgroundColor = '#404042';
-                 postIntroScreen.classList.remove('hidden');
+                postIntroScreen.style.backgroundColor = '#404042'; // Fallback background
+                postIntroScreen.classList.remove('hidden');
             } else {
-                 console.warn("Post-intro screen not found, showing main content directly on video error.");
-                 showMainContent();
+                 console.warn("Post-intro screen not found, attempting to show main content directly on video error.");
+                 showMainContent(); // Fallback to showing main content
             }
+            // Option 2 (Alternative): Go directly to main content on video error
+            // console.warn("Video error, skipping directly to main content.");
+            // showMainContent();
         });
     } else {
          // If no intro video element exists at all, skip straight to main content
-         console.warn("Intro video element not found. Skipping intro.");
-         showMainContent();
+         console.warn("Intro video element not found. Skipping intro phase.");
+         showMainContent(); // Show main content directly
          if (introContainer) introContainer.classList.add('hidden');
          if (postIntroScreen) postIntroScreen.classList.add('hidden');
-         // Hide skip controls container if no video
-         if (skipControlsContainer) skipControlsContainer.classList.add('hidden'); // **** CORRECTED ****
+         if (skipControlsContainer) skipControlsContainer.classList.add('hidden');
     }
 
-    // Click listener is still on the BUTTON itself
+
     if (skipIntroButton) {
         skipIntroButton.addEventListener('click', transitionToPostIntro);
     }
 
     // Enter key listener (to skip intro)
     document.addEventListener('keydown', (event) => {
-        // Check visibility of the CONTAINER
-        const isIntroPhaseActive = skipControlsContainer && !skipControlsContainer.classList.contains('hidden'); // **** CORRECTED ****
+        // Only allow skip if skip controls are visible AND post-intro isn't shown yet
+        const isIntroPhaseActive = skipControlsContainer && !skipControlsContainer.classList.contains('hidden');
+        const isPostIntroVisible = postIntroScreen && !postIntroScreen.classList.contains('hidden');
 
-        if (event.code === 'Enter' && isIntroPhaseActive) {
+        if (event.code === 'Enter' && isIntroPhaseActive && !isPostIntroVisible) {
             event.preventDefault();
-            console.log("Enter key pressed during intro - Skipping...");
+            console.log("Enter key pressed during intro video - Skipping...");
             transitionToPostIntro();
         }
     });
 
 
-    if (enterButton) { // The "Start" button on the post-intro screen
-        enterButton.addEventListener('click', showMainContent);
+    // Explore button click listener
+    if (exploreButton) {
+        exploreButton.addEventListener('click', () => {
+             console.log("Explore button clicked!");
+             showMainContent(); // Call the function to show the main content area AND add header buttons
+        });
+    } else {
+         console.warn("Could not find the 'Explore' button with ID 'start-button-left'.");
     }
 
     // --- Main Interaction Event Listeners ---
@@ -271,23 +301,27 @@ document.addEventListener('DOMContentLoaded', () => {
     if (catQuestionInput) {
         catQuestionInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
-                event.preventDefault();
+                event.preventDefault(); // Prevent potential form submission
                 processQuestion();
             }
         });
     }
 
-    // Click Outside Popup to Close
-    // Note: This version doesn't use the document click listener from the very first script,
-    // It uses the simpler version from the second script which only closes if the click is *directly* on the popup overlay.
-    // Adjust if you need the more complex behavior of closing on any click outside popup *and* outside cat container.
-    if (popup) {
-        popup.addEventListener('click', (event) => {
-            if (event.target === popup) {
+    // Click Outside Popup to Close (Added check for popup existence)
+    document.addEventListener('click', (event) => {
+        // Check if popup exists and is visible
+        if (popup && !popup.classList.contains('hidden')) {
+            // Check if the click was outside the popup content AND not on the cat image (which opens the popup)
+            // AND not on a hotspot (which also opens the popup)
+            const isClickInsidePopup = popup.contains(event.target);
+            const isClickOnCat = catHelperImage && catHelperImage.contains(event.target);
+            const isClickOnHotspot = event.target.classList.contains('hotspot');
+
+            if (!isClickInsidePopup && !isClickOnCat && !isClickOnHotspot) {
                 hidePopup();
             }
-        });
-    }
+        }
+    });
 
 
     // --- 5. STYLING (For Loading Indicator) ---
@@ -309,9 +343,29 @@ document.addEventListener('DOMContentLoaded', () => {
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Style for the close button if it's just text */
+        #close-popup::before {
+          content: '\\00d7'; /* Unicode multiplication sign (X) */
+          display: inline-block; /* Needed for positioning */
+        }
+
     `;
     document.head.appendChild(style);
 
-    // --- END OF MERGED CODE ---
+    // Initial check: If post-intro screen exists but is hidden, and main content is also hidden,
+    // assume we should be showing the post-intro screen (e.g., JS loaded after HTML fully rendered).
+    // This handles edge cases where the initial hidden state might be incorrect on load.
+    if (postIntroScreen && postIntroScreen.classList.contains('hidden') &&
+        mainContent && mainContent.classList.contains('hidden') &&
+        introContainer && introContainer.classList.contains('hidden') && /* Ensure intro isn't supposed to be playing */
+        skipControlsContainer && skipControlsContainer.classList.contains('hidden') /* Ensure skip isn't showing */
+        ) {
+          console.log("Initial state check: Forcing post-intro screen visibility.");
+          postIntroScreen.classList.remove('hidden');
+          // Keep intro container hidden if it was already hidden (e.g., video error case handled earlier)
+          if(introContainer) introContainer.classList.add('hidden');
+    }
+
 
 }); // End of DOMContentLoaded
