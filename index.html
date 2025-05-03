@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Interactivo Coche</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- === HEADER RESTAURADO === -->
+    <header class="cupra-header">
+        <div class="header-container">
+            <div class="logo-container">
+                <!-- Asegúrate que la ruta sea correcta -->
+                <a href="/">
+                    <img src="Imatges/CupraLogo.jpg" alt="Cupra Logo">
+                </a>
+            </div>
+            <!-- Podrías añadir aquí .user-nav si lo necesitas -->
+        </div>
+    </header>
+    <!-- === FIN HEADER === -->
+
+    <!-- Título y Subtítulo (como estaban antes de la IA, pero con texto actualizado) -->
+    <h1>Manual Interactivo del Coche</h1>
+    <p class="subtitle">Haz clic en los puntos o pregúntale al gato.</p>
+
+    <!-- Área Interactiva del Coche (sin cambios) -->
+    <div id="interactive-area">
+        <!-- Asegúrate que la ruta sea correcta -->
+        <img id="car-image" src="Imatges/ImatgeCotxe.png" alt="Imagen del coche">
+
+        <!-- Hotspots (sin cambios) -->
+        <div class="hotspot" id="hotspot-volante" data-title="Volante Multifunción"
+            data-info="Controla la dirección. Incluye botones para claxon, audio, teléfono y control de crucero (según modelo).">
+        </div>
+        <div class="hotspot" id="hotspot-pantalla" data-title="Pantalla Infoentretenimiento"
+            data-info="Acceso a navegación, radio, multimedia, ajustes del vehículo y conectividad (Bluetooth, Apple CarPlay/Android Auto).">
+        </div>
+        <div class="hotspot" id="hotspot-clima" data-title="Controles Climatizador"
+            data-info="Ajusta la temperatura, velocidad del ventilador, dirección del aire y activa el aire acondicionado (A/C) o la calefacción.">
+        </div>
+        <div class="hotspot" id="hotspot-emergencia" data-title="Luces de Emergencia"
+            data-info="Activa todas las luces intermitentes simultáneamente para señalizar una emergencia o detención peligrosa. Botón con triángulo rojo.">
+        </div>
+        <!-- Añade más hotspots aquí si es necesario -->
+    </div>
+
+    <!-- Contenedor Gato Ayudante (como en la versión "Helper", pero AÑADIENDO el input) -->
+    <div id="cat-helper-container">
+        <!-- Popup (posición relativa al contenedor) -->
+        <div id="info-popup" class="hidden">
+            <button id="close-popup">×</button>
+            <h2 id="popup-title">Título</h2>
+            <p id="popup-info">Información...</p>
+        </div>
+
+        <!-- Imagen del Gato -->
+        <!-- Asegúrate que la ruta sea correcta -->
+        <img id="cat-helper-image" src="Imatges/Tavascat.png" alt="Gato ayudante">
+
+        <!-- Input y Botón para preguntar (AÑADIDO AQUÍ) -->
+        <div id="cat-input-area">
+            <input type="text" id="cat-question-input" placeholder="Pregúntale al gato...">
+            <button id="ask-cat-button">Enviar</button>
+        </div>
+    </div>
+    <!-- FIN CONTENEDOR GATO -->
+
+    <!-- Script al final -->
+    <script src="script.js"></script>
+</body>
+
+</html>
