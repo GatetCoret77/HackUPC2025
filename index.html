@@ -26,14 +26,18 @@
     </header>
     <!-- === FIN HEADER === -->
 
-    <!-- === INTRO VIDEO CONTAINER (Permanecerá visible como fondo) === -->
-    <div id="intro-container">
-        <video id="intro-video" src="/Videos/tavascan.mp4" autoplay muted playsinline>
-            Tu navegador no soporta la etiqueta de video.
-        </video>
+<!-- === INTRO VIDEO CONTAINER (Permanecerá visible como fondo) === -->
+<div id="intro-container">
+    <video id="intro-video" src="/Videos/tavascan.mp4" autoplay muted playsinline>
+        Tu navegador no soporta la etiqueta de video.
+    </video>
+    <!-- Wrap button and hint in a container -->
+    <div id="skip-controls-container">
         <button id="skip-intro-button">Skip Intro</button>
+        <span id="skip-hint">Or press enter</span> <!-- Added hint text -->
     </div>
-    <!-- === FIN INTRO VIDEO CONTAINER === -->
+</div>
+<!-- === FIN INTRO VIDEO CONTAINER === -->
 
     <!-- === POST-INTRO SCREEN (Overlay sobre el video pausado) === -->
     <div id="post-intro-screen" class="hidden">
@@ -76,7 +80,7 @@
         <!-- Contenedor Gato Ayudante -->
         <div id="cat-helper-container">
             <div id="info-popup" class="hidden">
-                <button id="close-popup">×</button>
+                <button id="close-popup"></button>
                 <h2 id="popup-title">Título</h2>
                 <p id="popup-info">Información...</p>
             </div>

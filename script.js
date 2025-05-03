@@ -1,3 +1,5 @@
+// FINAL COMBINED AND CORRECTED SCRIPT for the provided HTML structure
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- *** MERGED CODE *** ---
@@ -8,7 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const introVideo = document.getElementById('intro-video');
     const postIntroScreen = document.getElementById('post-intro-screen');
     const enterButton = document.getElementById('enter-button');
-    const skipIntroButton = document.getElementById('skip-intro-button');
+    const skipIntroButton = document.getElementById('skip-intro-button'); // Needed for click listener
+    const skipControlsContainer = document.getElementById('skip-controls-container'); // **** Added for container logic ****
     const mainContent = document.getElementById('main-content');
 
     // Main Interaction Elements (Cat, Popup, Hotspots)
@@ -25,19 +28,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 2. CONFIGURATION & LOCAL DATA ---
 
     // !!! IMPORTANT: Choose the correct Backend URL for your setup !!!
-    // const BACKEND_URL = 'http://127.0.0.1:5000/ask'; // From First Code
-    const BACKEND_URL = 'http://localhost:3000/ask-ollama'; // From Second Code (using this one)
+    // const BACKEND_URL = 'http://127.0.0.1:5000/ask'; // Example 1
+    const BACKEND_URL = 'http://localhost:3000/ask-ollama'; // Example 2 (Using this one based on your second code block)
 
-    // Store hotspot info locally (From Second Code)
+    // Store hotspot info locally
     const hotspotData = {};
     if (hotspots) {
         hotspots.forEach(hotspot => {
-            // Use hotspot.id or another unique identifier if available and preferred
-            const id = hotspot.id || hotspot.dataset.title; // Fallback to title if no id
+            const id = hotspot.id || hotspot.dataset.title;
             if (id) {
                  hotspotData[id] = {
-                    title: hotspot.dataset.title || "Info", // Default title
-                    info: hotspot.dataset.info || "No details available." // Default info
+                    title: hotspot.dataset.title || "Info",
+                    info: hotspot.dataset.info || "No details available."
                 };
             } else {
                 console.warn("Hotspot found without id or data-title, cannot store data:", hotspot);
@@ -45,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Basic local responses (From Second Code)
+    // Basic local responses
     const basicResponses = {
         'hola': "¡Miau! Hola. ¿En qué puedo ayudarte con el coche?",
         'adios': "¡Miau! Hasta luego.",
@@ -54,10 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'como estas': "¡Genial! Listo para ayudarte con el coche. Miau.",
         'que haces': "Estoy consultando mi información para ayudarte. Pregúntame algo. Miau!",
         'miau': "¡Miau! ¿Decías?"
-        // Add more simple keywords/responses here
     };
 
-    // Random phrases for clicking the cat (From Second Code)
+    // Random phrases for clicking the cat
     const catClickPhrases = [
         "¿En qué puedo ayudarte?",
         "¡Hey! ¿Qué tal?",
@@ -69,22 +70,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 3. FUNCTIONS ---
 
-    // --- Intro Transition Functions (From First Code, with checks) ---
+    // --- Intro Transition Functions ---
     function transitionToPostIntro() {
+        // Check if already transitioned
+        if (postIntroScreen && !postIntroScreen.classList.contains('hidden')) {
+             console.log("Transition to post-intro already happened.");
+             return;
+        }
+        console.log("Transitioning to post-intro screen...");
+
         if (introVideo) introVideo.pause();
-        if (skipIntroButton) skipIntroButton.classList.add('hidden');
+        // Hide the entire skip controls container (button + hint)
+        if (skipControlsContainer) skipControlsContainer.classList.add('hidden'); // **** CORRECTED ****
         if (postIntroScreen) postIntroScreen.classList.remove('hidden');
         // Do NOT hide introContainer here initially, it acts as background
     }
 
     function showMainContent() {
+        console.log("Showing main content...");
         if (postIntroScreen) postIntroScreen.classList.add('hidden');
         if (introContainer) introContainer.classList.add('hidden'); // Hide video bg NOW
         if (mainContent) mainContent.classList.remove('hidden');
         document.body.style.overflow = 'auto'; // Enable scrolling
     }
 
-    // --- Popup Functions (From Second Code, handles loading class) ---
+    // --- Popup Functions ---
     function showPopup(title, info) {
         if (!popup || !popupTitle || !popupInfo) return;
         popupTitle.textContent = title;
@@ -98,19 +108,18 @@ document.addEventListener('DOMContentLoaded', () => {
         popup.classList.add('hidden');
     }
 
-    // --- Backend Interaction Function (From Second Code - Ollama logic) ---
+    // --- Backend Interaction Function ---
     async function processQuestion() {
-        if (!catQuestionInput || !askCatButton || !popup) return; // Check required elements
+        if (!catQuestionInput || !askCatButton || !popup) return;
 
         const question = catQuestionInput.value.trim();
-        if (!question) return; // Do nothing if empty
+        if (!question) return;
 
         const lowerQ = question.toLowerCase();
         let handledLocally = false;
 
         // 1. Check for basic local responses first
         for (const keyword in basicResponses) {
-            // Match if the question *is* the keyword, or starts/ends with it (basic check)
              if (lowerQ === keyword || lowerQ.startsWith(keyword + ' ') || lowerQ.endsWith(' ' + keyword) || lowerQ.includes(' ' + keyword + ' ')) {
                 showPopup("Gato Ayudante", basicResponses[keyword]);
                 handledLocally = true;
@@ -119,14 +128,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (handledLocally) {
-            catQuestionInput.value = ''; // Clear input
+            catQuestionInput.value = '';
             catQuestionInput.focus();
             return; // Don't proceed to backend
         }
 
         // 2. If not basic, send to backend
-        showPopup("Gato Ayudante", "Miau... Pensando..."); // Show loading state
-        if (popupInfo) popupInfo.classList.add('loading'); // Add visual indicator
+        showPopup("Gato Ayudante", "Miau... Pensando...");
+        if (popupInfo) popupInfo.classList.add('loading');
         askCatButton.disabled = true;
         catQuestionInput.disabled = true;
 
@@ -134,46 +143,38 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Sending to backend (${BACKEND_URL}): ${question}`);
             const response = await fetch(BACKEND_URL, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json', },
                 body: JSON.stringify({ question: question }),
             });
 
-            // Improved error handling from backend response
             if (!response.ok) {
                 let errorMsg = `Miau! Error ${response.status}. No pude conectar con mi cerebro...`;
                 try {
                     const errorData = await response.json();
-                    errorMsg = errorData.error || errorData.answer || errorMsg; // Use backend message if available
+                    errorMsg = errorData.error || errorData.answer || errorMsg;
                     console.error("Backend error response:", errorData);
                 } catch (e) {
                      console.error("Could not parse error response from backend.");
-                     // Optionally try to read response as text for debugging
-                     const textError = await response.text();
+                     const textError = await response.text().catch(() => "Could not read text response"); // Prevent double error
                      console.error("Backend error response (text):", textError);
                      errorMsg += ` Server response: ${response.statusText || 'Unknown'}`;
                 }
-                 // Add a check for specific statuses if needed
                  if (response.status === 404) errorMsg += " Endpoint no encontrado.";
                  if (response.status === 500) errorMsg += " Problema interno del servidor.";
-
                 throw new Error(errorMsg);
             }
 
             const data = await response.json();
             console.log(`Received from backend:`, data);
-            showPopup("Gato Ayudante", data.answer || "Miau... No recibí una respuesta clara."); // Display backend's answer
+            showPopup("Gato Ayudante", data.answer || "Miau... No recibí una respuesta clara.");
 
         } catch (error) {
             console.error('Error asking cat:', error);
-            // Show specific error message thrown or a generic one
             showPopup("Error", error.message || "Miau! Hubo un problema al procesar tu pregunta.");
         } finally {
-            // Re-enable input/button and clear input
             askCatButton.disabled = false;
             catQuestionInput.disabled = false;
-            if (popupInfo) popupInfo.classList.remove('loading'); // Remove visual indicator
+            if (popupInfo) popupInfo.classList.remove('loading');
             catQuestionInput.value = '';
             catQuestionInput.focus();
         }
@@ -182,52 +183,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 4. EVENT LISTENERS ---
 
-    // --- Intro Event Listeners (From First Code, with checks) ---
+    // --- Intro Event Listeners ---
     if (introVideo) {
         introVideo.addEventListener('ended', transitionToPostIntro);
         introVideo.addEventListener('error', (e) => {
             console.error("Error loading/playing intro video:", e);
-            // Fallback: Hide intro elements, try showing post-intro or main content
             if (introContainer) introContainer.classList.add('hidden');
-            if (skipIntroButton) skipIntroButton.classList.add('hidden');
+            // Hide skip controls container on error
+            if (skipControlsContainer) skipControlsContainer.classList.add('hidden'); // **** CORRECTED ****
             if (postIntroScreen) {
-                 postIntroScreen.style.backgroundColor = '#404042'; // Fallback background
+                 postIntroScreen.style.backgroundColor = '#404042';
                  postIntroScreen.classList.remove('hidden');
             } else {
                  console.warn("Post-intro screen not found, showing main content directly on video error.");
-                 showMainContent(); // Show main content if post-intro also fails
+                 showMainContent();
             }
         });
     } else {
          // If no intro video element exists at all, skip straight to main content
          console.warn("Intro video element not found. Skipping intro.");
          showMainContent();
-         // Ensure other intro elements are hidden if they somehow exist
          if (introContainer) introContainer.classList.add('hidden');
          if (postIntroScreen) postIntroScreen.classList.add('hidden');
-         if (skipIntroButton) skipIntroButton.classList.add('hidden');
+         // Hide skip controls container if no video
+         if (skipControlsContainer) skipControlsContainer.classList.add('hidden'); // **** CORRECTED ****
     }
 
+    // Click listener is still on the BUTTON itself
     if (skipIntroButton) {
         skipIntroButton.addEventListener('click', transitionToPostIntro);
     }
 
-    if (enterButton) {
+    // Enter key listener (to skip intro)
+    document.addEventListener('keydown', (event) => {
+        // Check visibility of the CONTAINER
+        const isIntroPhaseActive = skipControlsContainer && !skipControlsContainer.classList.contains('hidden'); // **** CORRECTED ****
+
+        if (event.code === 'Enter' && isIntroPhaseActive) {
+            event.preventDefault();
+            console.log("Enter key pressed during intro - Skipping...");
+            transitionToPostIntro();
+        }
+    });
+
+
+    if (enterButton) { // The "Start" button on the post-intro screen
         enterButton.addEventListener('click', showMainContent);
     }
 
-    // --- Main Interaction Event Listeners (Using Logic from Second Code) ---
+    // --- Main Interaction Event Listeners ---
 
-    // Hotspot Clicks (Show local data from hotspotData)
+    // Hotspot Clicks
     if (hotspots) {
         hotspots.forEach(hotspot => {
             hotspot.addEventListener('click', () => {
-                 const id = hotspot.id || hotspot.dataset.title; // Get the same ID used to store data
+                 const id = hotspot.id || hotspot.dataset.title;
                 const data = hotspotData[id];
                 if (data) {
                     showPopup(data.title, data.info);
                 } else {
-                    // Fallback if data wasn't stored correctly
                     showPopup(hotspot.dataset.title || "Info", "Details not found for this hotspot.");
                     console.warn("Could not find stored data for hotspot:", hotspot);
                 }
@@ -240,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeButton.addEventListener('click', hidePopup);
     }
 
-    // Cat Image Click (Show random phrase)
+    // Cat Image Click
     if (catHelperImage) {
         catHelperImage.addEventListener('click', () => {
             const randomIndex = Math.floor(Math.random() * catClickPhrases.length);
@@ -248,26 +262,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Ask Button Click (Process question via backend)
+    // Ask Button Click
     if (askCatButton) {
         askCatButton.addEventListener('click', processQuestion);
     }
 
-    // Enter Key in Input Field (Process question via backend)
+    // Enter Key in Input Field (for asking cat)
     if (catQuestionInput) {
         catQuestionInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
-                event.preventDefault(); // Prevent default form submission (if applicable)
+                event.preventDefault();
                 processQuestion();
             }
         });
     }
 
-    // Click Outside Popup to Close (Simpler version from Second Code)
+    // Click Outside Popup to Close
+    // Note: This version doesn't use the document click listener from the very first script,
+    // It uses the simpler version from the second script which only closes if the click is *directly* on the popup overlay.
+    // Adjust if you need the more complex behavior of closing on any click outside popup *and* outside cat container.
     if (popup) {
         popup.addEventListener('click', (event) => {
-            // Close only if the click is directly on the popup background (event.target)
-            // not on its children (content area, title, close button etc.)
             if (event.target === popup) {
                 hidePopup();
             }
@@ -275,21 +290,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // --- 5. STYLING (For Loading Indicator - From Second Code) ---
+    // --- 5. STYLING (For Loading Indicator) ---
     const style = document.createElement('style');
     style.textContent = `
         #popup-info.loading::after {
             content: ' ';
             display: inline-block;
-            width: 0.8em; /* Adjusted size slightly */
-            height: 0.8em; /* Adjusted size slightly */
+            width: 0.8em;
+            height: 0.8em;
             border: 2px solid #ccc;
             border-radius: 50%;
-            border-top-color: #333; /* Spinner color */
+            border-top-color: #333;
             animation: spin 1s linear infinite;
-            margin-left: 8px; /* Spacing */
+            margin-left: 8px;
             vertical-align: middle;
-            box-sizing: border-box; /* Include border in size */
+            box-sizing: border-box;
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
