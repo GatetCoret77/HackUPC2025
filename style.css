@@ -1,4 +1,5 @@
-/* --- Fuentes (sin cambios) --- */
+/* --- Fuentes --- */
+/* Poppins (existing) */
 @font-face {
     font-family: 'Poppins';
     src: url('/fonts/poppins-regular.woff2') format('woff2'),
@@ -11,218 +12,202 @@
         url('/fonts/poppins-bold.woff') format('woff');
     font-weight: 700; font-style: normal; font-display: swap;
 }
+/* Roboto (for reveal animation, optional) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
-/* --- Estilos Generales y Reset (Restaurado) --- */
+
+/* --- Estilos Generales y Reset --- */
 body {
     margin: 0;
-    /* IMPORTANTE: Añadir padding-top para el header FIJO */
-    padding-top: 80px; /* Ajusta este valor a la altura de tu header + un poco de margen */
-    font-family: 'Poppins', sans-serif;
-    background-color: #404042; /* Fondo gris oscuro */
-    color: #f0f0f0; /* Texto claro por defecto */
+    padding-top: 80px; /* Header is always visible */
+    font-family: 'Poppins', sans-serif; /* Default font */
+    background-color: #404042;
+    color: #f0f0f0;
     min-height: 100vh;
-    position: relative; /* Necesario para algunos posicionamientos absolutos/fijos */
+    position: relative;
+    overflow: hidden; /* Ocultar scroll inicialmente */
 }
 
 a { text-decoration: none; color: inherit; }
 img { display: block; max-width: 100%; height: auto; }
 button { background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; }
 
-h1 {
-    font-weight: 700;
-    text-align: center;
-    margin-top: 20px; /* Margen respecto al padding del body */
-    margin-bottom: 5px;
-    color: #ffffff;
-}
-
-.subtitle { /* Estilo que teníamos para el subtítulo */
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 0.9em;
-    color: #cccccc;
-}
-
-/* --- ESTILOS HEADER RESTAURADOS --- */
+/* --- ESTILOS HEADER (Siempre visible) --- */
 .cupra-header {
     background-color: #000000;
     color: #ffffff;
     padding: 10px 25px;
-    height: 60px; /* Altura fija del header */
+    height: 60px;
     box-sizing: border-box;
-    position: fixed; /* FIJO en la parte superior */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+    z-index: 1000; /* Encima de todo */
 }
-
-.header-container {
-    display: flex;
-    justify-content: space-between; /* Logo a la izquierda, resto a la derecha (si hubiera) */
-    align-items: center;
-    height: 100%;
-    max-width: 1400px; /* Ancho máximo del contenido del header */
-    margin: 0 auto; /* Centrar el contenedor del header */
-}
-
-.logo-container img {
-    height: 35px; /* Ajusta al tamaño de tu logo */
-}
+.header-container { display: flex; justify-content: space-between; align-items: center; height: 100%; max-width: 1400px; margin: 0 auto; }
+.logo-container img { height: 35px; }
 /* --- FIN ESTILOS HEADER --- */
 
 
-/* --- Área Interactiva y Hotspots (Restaurado) --- */
-#interactive-area {
-    position: relative;
-    max-width: 800px;
-    width: 90%;
-    margin: 20px auto; /* Centrado y con margen vertical */
-    /* border: 1px solid #ccc; */ /* Borde opcional */
+/* --- ESTILOS INTRO VIDEO Y POST-INTRO --- */
+#intro-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100vh;
+    background-color: #000000; /* Fallback */
+    z-index: 990; /* Debajo del header */
+    display: flex; justify-content: center; align-items: center;
     overflow: hidden;
-    background-color: #404042; /* Fondo por si la imagen tarda */
 }
+#intro-video { width: 100%; height: 100%; object-fit: cover; }
 
-#car-image {
-    display: block;
-    width: 100%;
-}
-
-.hotspot {
+/* --- Skip Intro Button Style --- */
+#skip-intro-button {
     position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: #FF8C00; /* Naranja */
-    border-radius: 50%;
-    border: 2px solid white;
+    bottom: 30px;
+    right: 30px;
+    z-index: 991; /* Above video, below post-intro overlay */
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.8em;
     cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.2s ease;
-    box-shadow: 0 0 8px rgba(255, 140, 0, 0.7);
+    transition: background-color 0.3s ease;
+}
+#skip-intro-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+/* --- End Skip Intro Button Style --- */
+
+
+#post-intro-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100vh;
+    background-color: transparent; /* See video frame */
+    /* background-color: rgba(0, 0, 0, 0.2); */ /* Optional overlay */
+    z-index: 995; /* Encima del video y skip button, debajo del header */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #ffffff;
+    padding-top: 80px; /* Account for header */
+    box-sizing: border-box;
 }
 
-.hotspot:hover {
-    transform: scale(1.3);
+/* --- Text Reveal Animation Styles --- */
+.text-reveal-wrapper {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.reveal-static, .reveal-container {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  font-family: 'Roboto', 'Poppins', sans-serif;
+  font-weight: 300;
+  font-size: 2.8em;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.reveal-static {
+  animation: showup-once 2s ease-out 0s 1 forwards;
+}
+
+.reveal-container {
+  width: 0px;
+  animation: reveal-text 2s ease-out 0.5s 1 forwards;
+}
+
+.reveal-sliding {
+  margin-left: -480px; /* <<< ADJUST THIS VALUE */
+  animation: slidein-once 2s ease-out 0.5s 1 forwards;
+}
+
+/* --- Keyframes (Adapted) --- */
+@keyframes showup-once {
+    0% {opacity:0;}
+    30% {opacity:1;}
+    100% {opacity:1;}
+}
+
+@keyframes slidein-once {
+    0% { margin-left: -480px; } /* <<< ADJUST THIS VALUE */
+    40% { margin-left: -480px; } /* <<< ADJUST THIS VALUE */
+    70% { margin-left: 0px; }
+    100% { margin-left: 0px; }
+}
+
+@keyframes reveal-text {
+    0% {opacity:0; width:0px;}
+    40% {opacity:1; width:0px;}
+    70% {width: 480px;} /* <<< ADJUST THIS VALUE */
+    100% {opacity:1; width: 480px;} /* <<< ADJUST THIS VALUE */
+}
+/* --- End Text Reveal Animation Styles --- */
+
+
+#enter-button {
+    background-color: #FF8C00;
+    color: white;
+    padding: 15px 40px;
+    border-radius: 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: 2px solid #FF8C00;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    animation: fadein-button 1s ease-out 2.5s 1 forwards;
+}
+
+#enter-button:hover {
     background-color: #FFA500;
+    border-color: #FFA500;
+    transform: scale(1.05);
 }
 
-/* Posiciones Hotspots (Restauradas - AJUSTA SI ES NECESARIO) */
+@keyframes fadein-button {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* Clase para ocultar elementos */
+.hidden {
+    display: none !important;
+}
+
+/* --- ESTILOS CONTENIDO PRINCIPAL (dentro de #main-content) --- */
+/* Hotspots styles should work fine once #main-content is visible */
+#main-content h1 { font-weight: 700; text-align: center; margin-top: 20px; margin-bottom: 5px; color: #ffffff; }
+#main-content .subtitle { text-align: center; margin-bottom: 30px; font-size: 0.9em; color: #cccccc; }
+#interactive-area { position: relative; max-width: 800px; width: 90%; margin: 20px auto; overflow: hidden; background-color: #404042; }
+#car-image { display: block; width: 100%; }
+.hotspot { position: absolute; width: 20px; height: 20px; background-color: #FF8C00; border-radius: 50%; border: 2px solid white; cursor: pointer; transition: transform 0.2s ease, background-color 0.2s ease; box-shadow: 0 0 8px rgba(255, 140, 0, 0.7); }
+.hotspot:hover { transform: scale(1.3); background-color: #FFA500; }
 #hotspot-volante { top: 55%; left: 28%; }
 #hotspot-pantalla { top: 45%; left: 48%; }
 #hotspot-clima { top: 65%; left: 50%; transform: translateX(-50%); }
 #hotspot-emergencia { top: 52%; left: 60%; }
-
-
-/* --- Gato Ayudante y Área de Input (Combinación de estilos) --- */
-
-/* Contenedor principal del gato: Fijo abajo a la izquierda */
-#cat-helper-container {
-    position: fixed;
-    bottom: 10px; /* Espacio desde abajo */
-    left: 15px;  /* Espacio desde la izquierda */
-    z-index: 998;
-    display: flex; /* Para alinear gato e input */
-    align-items: flex-end; /* Alinear elementos en la parte inferior */
-    gap: 10px; /* Espacio entre gato y área de input */
-}
-
-/* Imagen del gato */
-#cat-helper-image {
-    display: block;
-    width: 90px; /* Tamaño del gato */
-    height: auto;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    /* margin-bottom: 5px; */ /* Quitado o ajustado si es necesario */
-}
-#cat-helper-image:hover {
-    transform: scale(1.1);
-}
-
-/* Área de Input (NUEVOS ESTILOS) */
-#cat-input-area {
-    display: flex;
-    align-items: center;
-    background-color: rgba(50, 50, 50, 0.8); /* Fondo oscuro semitransparente */
-    padding: 5px 8px;
-    border-radius: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    margin-bottom: 5px; /* Pequeño margen inferior para alinear mejor con el gato */
-}
-
-#cat-question-input {
-    flex-grow: 1;
-    border: none;
-    background: transparent;
-    padding: 8px 10px;
-    font-size: 0.9em;
-    color: #f0f0f0; /* Texto claro */
-    outline: none;
-    min-width: 150px;
-}
-#cat-question-input::placeholder {
-    color: #a0a0a0;
-    opacity: 0.8;
-}
-
-#ask-cat-button {
-    background-color: #FF8C00; /* Naranja */
-    color: white;
-    border: none;
-    border-radius: 15px;
-    padding: 6px 12px;
-    font-size: 0.85em;
-    font-weight: bold;
-    cursor: pointer;
-    margin-left: 5px;
-    transition: background-color 0.2s ease;
-}
-#ask-cat-button:hover {
-    background-color: #FFA500;
-}
-
-
-/* --- Popup (Estilos restaurados y ajustados para nueva posición) --- */
-#info-popup {
-    position: absolute; /* Relativo a #cat-helper-container */
-    /* AJUSTAR 'bottom' para que quede encima del GATO y el INPUT AREA */
-    bottom: 105px;  /* Valor inicial, AJUSTA según veas necesario */
-    left: 5px;     /* Cerca del borde izquierdo del contenedor */
-    width: auto;
-    min-width: 180px;
-    max-width: 300px;
-    background-color: #ffffff;
-    color: #333333;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    padding-top: 35px; /* Espacio para botón cerrar */
-    z-index: 999; /* Encima del gato/input */
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-    transform-origin: bottom left; /* Animación desde abajo a la izquierda */
-}
-
-#info-popup.hidden {
-    opacity: 0;
-    visibility: hidden;
-    transform: scale(0.9) translateY(10px);
-}
-
-/* Triángulo del bocadillo (Restaurado) */
-#info-popup::after {
-    content: '';
-    position: absolute;
-    bottom: -10px; /* Justo debajo */
-    left: 30px;   /* Ajusta horizontalmente para que apunte desde cerca del gato */
-    width: 0; height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid #ffffff; /* Color del fondo del popup */
-}
-
-/* Estilos internos del Popup (Restaurados) */
+#cat-helper-container { position: fixed; bottom: 10px; left: 15px; z-index: 998; display: flex; align-items: flex-end; gap: 10px; }
+#cat-helper-image { display: block; width: 90px; height: auto; cursor: pointer; transition: transform 0.2s ease; }
+#cat-helper-image:hover { transform: scale(1.1); }
+#cat-input-area { display: flex; align-items: center; background-color: rgba(50, 50, 50, 0.8); padding: 5px 8px; border-radius: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); margin-bottom: 5px; }
+#cat-question-input { flex-grow: 1; border: none; background: transparent; padding: 8px 10px; font-size: 0.9em; color: #f0f0f0; outline: none; min-width: 150px; }
+#cat-question-input::placeholder { color: #a0a0a0; opacity: 0.8; }
+#ask-cat-button { background-color: #FF8C00; color: white; border: none; border-radius: 15px; padding: 6px 12px; font-size: 0.85em; font-weight: bold; cursor: pointer; margin-left: 5px; transition: background-color 0.2s ease; }
+#ask-cat-button:hover { background-color: #FFA500; }
+#info-popup { position: absolute; bottom: 105px; left: 5px; width: auto; min-width: 180px; max-width: 300px; background-color: #ffffff; color: #333333; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); padding: 20px; padding-top: 35px; z-index: 999; opacity: 1; visibility: visible; transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; transform-origin: bottom left; }
+#info-popup.hidden { opacity: 0; visibility: hidden; transform: scale(0.9) translateY(10px); }
+#info-popup::after { content: ''; position: absolute; bottom: -10px; left: 30px; width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 10px solid #ffffff; }
 #info-popup h2 { margin-top: 0; margin-bottom: 10px; color: #333; font-size: 1.1em; }
 #info-popup p { color: #555; line-height: 1.5; text-align: left; font-size: 0.9em; margin-bottom: 0; }
 #close-popup { position: absolute; top: 8px; right: 8px; background: none; border: none; font-size: 22px; font-weight: bold; color: #aaaaaa; cursor: pointer; padding: 0 5px; line-height: 1; }
