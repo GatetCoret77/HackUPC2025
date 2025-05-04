@@ -173,8 +173,39 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
     margin-top: 20px;
     margin-bottom: 25px;
     color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+}
+/* --- Styles for Subtitle Below Videos --- */
+.video-subtitle {
+    text-align: center;     /* Centra el texto "Hola" */
+    color: #e0e0e0;         /* Un color claro, similar al texto general */
+    font-size: 1.3em;       /* Tamaño de fuente (ajusta si lo quieres más grande/pequeño) */
+    font-weight: 600;       /* Un poco menos grueso que el h1 */
+    margin-top: 90px;       /* Margen SUPERIOR: Espacio entre el video y "Hola" */
+    margin-bottom: 40px;    /* Margen INFERIOR: Espacio entre "Hola" y el área interactiva */
+    /* Puedes añadir más estilos si quieres (font-family, etc.) */
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
 }
 
+.video-subtitle-description {
+    text-align: center;     /* Centra el texto */
+    color: #cccccc;         /* Un gris un poco más claro que el "Hola" */
+    font-size: 1em;         /* Tamaño de fuente normal o ligeramente menor */
+    font-weight: 400;       /* Peso normal */
+    margin-top: 0;          /* Quita el espacio superior por defecto del párrafo */
+    padding: 0 15px;        /* Un poco de padding lateral por si el texto es largo */
+    line-height: 1.4;       /* Espacio entre líneas si el texto ocupa más de una */
+    font-family: 'Poppins', sans-serif;
+}
+#exterior-view .video-subtitle-description {
+    margin-bottom: 10px; /* Ajusta este valor para el exterior */
+}
+
+/* Specific margin-bottom for the description in the INTERIOR view */
+#interior-view .video-subtitle-description {
+    margin-bottom: 50px; /* Ajusta este valor diferente para el interior */
+}
 /* Shared Subtitle style (optional) */
 .view-container .subtitle {
     text-align: center;
@@ -237,6 +268,152 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
 #hotspot-steering{ top: 42%; left: 37%; }
 #hotspot-cockpit{ top: 35%; left: 13%; }
 
+/* --- More Options Button Styles (Exterior View) --- */
+
+/* --- Fixed More Options Button Styles --- */
+#fixed-more-options-container {
+    position: fixed; /* Fijo respecto a la ventana */
+    bottom: 15px;  /* Misma altura que el gato (ajusta si es necesario) */
+    right: 20px;   /* Pegado a la derecha */
+    z-index: 997;  /* Debajo del popup del gato (999) pero encima del contenido */
+    opacity: 0;    /* Gestionado por JS con la clase hidden */
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Estilo para el botón dentro del nuevo contenedor */
+/* Puedes reutilizar/ajustar estilos del botón anterior si quieres */
+#fixed-more-options-container .more-options-button {
+    background: none;
+    border: none;
+    color: #cccccc;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+    font-weight: 400;
+    padding: 5px 0;
+    cursor: pointer;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+#fixed-more-options-container .more-options-button:hover {
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Regla para hacerlo visible cuando NO tiene la clase .hidden */
+#fixed-more-options-container:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Ajuste responsive si es necesario */
+@media (max-width: 768px) {
+    #fixed-more-options-container {
+        bottom: 10px;
+        right: 15px;
+    }
+    #fixed-more-options-container .more-options-button {
+        font-size: 0.85em;
+    }
+}
+
+/* --- Modal Styles --- */
+#modal-overlay {
+    position: fixed; /* Cubre toda la pantalla */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.65); /* Fondo semitransparente oscuro */
+    z-index: 1010; /* Por encima del contenido normal, debajo del modal */
+    /* La clase .hidden (definida arriba) lo oculta inicialmente */
+    /* Añadimos transición si queremos fade in/out (requiere ajustar .hidden) */
+    /* transition: opacity 0.3s ease, visibility 0.3s ease; */
+}
+
+#info-modal {
+    position: fixed; /* Fijo en la pantalla */
+    top: 50%;        /* Centrado vertical */
+    left: 50%;       /* Centrado horizontal */
+    transform: translate(-50%, -50%); /* Ajuste fino para centrar exactamente */
+    background-color: #ffffff; /* Fondo blanco */
+    color: #333333;       /* Texto oscuro */
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1020; /* Por encima del overlay */
+    min-width: 300px; /* Ancho mínimo */
+    max-width: 90%;   /* Ancho máximo */
+    font-family: 'Poppins', sans-serif;
+    /* La clase .hidden (definida arriba) lo oculta inicialmente */
+    /* Añadimos transición si queremos fade in/out (requiere ajustar .hidden) */
+    /* transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; */
+}
+
+.modal-content {
+    position: relative; /* Para posicionar el botón de cierre absoluto */
+}
+
+#info-modal h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+    color: #333;
+    text-align: center;
+    font-family: 'Poppins', sans-serif; 
+    font-weight: 700;
+}
+.modal-subtitle-text { /* Usamos la clase que añadimos */
+    font-size: 0.9em;     /* Letra más pequeña que el título */
+    color: #555555;       /* Un gris un poco más claro */
+    text-align: center;   /* Centrado igual que el título */
+    margin-top: 0;        /* Quitamos el margen superior por defecto del párrafo */
+    margin-bottom: 20px;  /* Espacio debajo del subtítulo */
+    font-weight: 400;     /* Puedes ajustar el peso si quieres */
+    font-family: 'Poppins', sans-serif;
+}
+
+.manual-link-style {
+    display: block; /* Para que ocupe su propia línea y permita centrar/márgenes */
+    text-align: center; /* Centra el texto del enlace */
+    margin-top: 10px; /* Espacio entre el subtítulo y el enlace */
+    margin-bottom: 10px; /* Espacio debajo del enlace */
+    font-size: 1em; /* Tamaño de fuente normal (puedes ajustarlo) */
+    color: #B46544; /* Un color que encaje, ej: el naranja de Cupra */
+    text-decoration: none; /* Quita el subrayado por defecto */
+    font-weight: 600; /* Un poco más grueso para destacar */
+    transition: color 0.2s ease, text-decoration 0.2s ease; /* Transición suave */
+}
+
+.manual-link-style:hover {
+    color: #FFA500; /* Un naranja más brillante al pasar el ratón */
+    text-decoration: underline; /* Añade subrayado al pasar el ratón */
+}
+#close-modal-button {
+    position: absolute;
+    top: -15px;  /* Ajusta para posicionar fuera del padding superior */
+    right: -18px; /* Ajusta para posicionar fuera del padding derecho */
+    background: none;
+    border: none;
+    font-size: 28px; /* Tamaño de la 'X' */
+    font-weight: bold;
+    color: #aaaaaa;
+    cursor: pointer;
+    padding: 0 5px;
+    line-height: 1;
+}
+
+#close-modal-button:hover {
+    color: #333;
+}
+
+/* Opcional: Evitar scroll del body cuando el modal está abierto */
+body.modal-open {
+    overflow: hidden;
+}
 
 /* --- CAT HELPER Styles --- */
 #cat-helper-container {
@@ -302,7 +479,7 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
 }
 #info-popup:not(.hidden) { opacity: 1; visibility: visible; transform: scale(1) translateY(0); pointer-events: auto; }
 #info-popup::after { /* Popup tail */ content: ''; position: absolute; bottom: -10px; left: 30px; width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 10px solid #ffffff; }
-#info-popup h2 { margin-top: 0; margin-bottom: 10px; color: #333; font-size: 1.1em; }
+#info-popup h2 { margin-top: 0; margin-bottom: 10px; color: #333; font-size: 1.1em; font-family: 'Poppins', sans-serif;}
 
 /* Popup Info Paragraph Style */
 #info-popup p {

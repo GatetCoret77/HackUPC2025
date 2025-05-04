@@ -8,8 +8,7 @@
     <!-- Optional: Include Roboto font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet"></head>
 <body>
 <!-- === HEADER === -->
 <header class="cupra-header hidden"> <!-- Initially hidden -->
@@ -56,73 +55,61 @@
 <div id="main-content" class="hidden">
 
     <!-- ======================================================== -->
-    <!-- === EXTERIOR VIEW CONTAINER                          === -->
-    <!-- ======================================================== -->
-    <div id="exterior-view" class="view-container hidden"> <!-- Start hidden, shown by JS -->
-         <h1>Discover Every Curve: Tavascan Exterior</h1>
+    <!-- === EXTERIOR VIEW CONTAINER === -->
+<div id="exterior-view" class="view-container hidden"> <!-- Start hidden, shown by JS -->
+    <h1>Discover Every Curve: Tavascan Exterior</h1>
 
-        <!-- Exterior Video -->
-        <div id="exterior-video-container">
-            <video id="exterior-video" width="100%" loop muted playsinline> <!-- Autoplay handled by JS -->
-                <source src="/Videos/exterior.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+   <!-- Exterior Video -->
+   <div id="exterior-video-container">
+       <video id="exterior-video" width="100%" loop muted playsinline> <!-- Autoplay handled by JS -->
+           <source src="/Videos/exterior.mp4" type="video/mp4">
+           Your browser does not support the video tag.
+       </video>
+   </div>
+
+   <h3 class="video-subtitle">Discover the key exterior features and specifications</h3>
+   <p class="video-subtitle-description">For more information ask TavasCAT</p>
+
+
+
+   <!-- Exterior Interactive Area -->
+   <div id="exterior-interactive-area">
+       <img id="exterior-image" src="Imatges/linies_cotxe_sense_fons_retallada.png" alt="Imagen detallada del exterior del coche">
+
+       <!-- Hotspots for the EXTERIOR image -->
+       <!-- ... (existing hotspots remain here) ... -->
+        <div class="hotspot exterior-hotspot" id="hotspot-socket"
+             style="top: 40%; left: 75%;"
+             data-title="Charging socket"
+             data-info="The vehicle’s high-voltage battery can be charged using alternating current (AC) through the corresponding charging socket.">
         </div>
-
-        <!-- Exterior Interactive Area -->
-        <div id="exterior-interactive-area">
-            <img id="exterior-image" src="Imatges/linies_cotxe_sense_fons_retallada.png" alt="Imagen detallada del exterior del coche">
-
-            <!-- Hotspots for the EXTERIOR image -->
-            <!-- Using inline style for positioning -->
-            <!-- NOTE: Adjust these percentage values as needed -->
-
-             <div class="hotspot exterior-hotspot" id="hotspot-socket"
-                  style="top: 40%; left: 75%;"
-                  data-title="Charging socket"
-                  data-info="The vehicle’s high-voltage battery can be charged using alternating current (AC) through the corresponding charging socket.">
-             </div>
-             <div class="hotspot exterior-hotspot" id="hotspot-rear_view"
-                  style="top: 53%; left: 92%;"
-                  data-title="Rear View Camera"
-                  data-info="A camera on the rear bumper aids the driver when reverse parking or manoeuvring.">
-             </div>
-             <div class="hotspot exterior-hotspot" id="hotspot-doors"
-                  style="top: 40%; left: 70%;"
-                  data-title="Doors"
-                  data-info="The doors and rear lid can be locked manually and partially opened, for example if the key or the central locking is damaged.">
-             </div>
-             <div class="hotspot exterior-hotspot" id="hotspot-park_assistor"
-                  style="top: 55%; left: 13%;"
-                  data-title="Park Assistor Sensor"
-                  data-info="The automatic parking system is an additional function of ParkPilot and helps the driver find a suitable parking space.">
-             </div>
-             <div class="hotspot exterior-hotspot" id="hotspot-f_camera"
-                  style="top: 33%; left: 36%;"
-                  data-title="Top view camera"
-                  data-info="One of the four cameras with which the system generates a representation that is shown on the infotainment system display. The cameras are located on the radiator grille, the exterior mirrors and the rear lid.">
-             </div>
-
-             <!-- ======== EXTERIOR HOTSPOT TEMPLATE ======== -->
-             <!-- To add a new exterior hotspot:
-                  1. Copy the div below.
-                  2. Give it a unique `id`.
-                  3. Set `style="top: XX%; left: YY%;"` adjusting XX and YY percentages.
-                  4. Update `data-title` and `data-info`.
-                  5. Make sure it has BOTH `hotspot` and `exterior-hotspot` classes.
-             -->
-             <!--
-             <div class="hotspot exterior-hotspot" id="new-exterior-hotspot-id"
-                  style="top: 60%; left: 50%;"
-                  data-title="New Feature Title"
-                  data-info="Description of the new exterior feature.">
-             </div>
-             -->
-             <!-- ========================================== -->
-
+        <div class="hotspot exterior-hotspot" id="hotspot-rear_view"
+             style="top: 53%; left: 92%;"
+             data-title="Rear View Camera"
+             data-info="A camera on the rear bumper aids the driver when reverse parking or manoeuvring.">
         </div>
-    </div> <!-- === FIN EXTERIOR VIEW CONTAINER === -->
+        <div class="hotspot exterior-hotspot" id="hotspot-doors"
+             style="top: 40%; left: 70%;"
+             data-title="Doors"
+             data-info="The doors and rear lid can be locked manually and partially opened, for example if the key or the central locking is damaged.">
+        </div>
+        <div class="hotspot exterior-hotspot" id="hotspot-park_assistor"
+             style="top: 55%; left: 13%;"
+             data-title="Park Assistor Sensor"
+             data-info="The automatic parking system is an additional function of ParkPilot and helps the driver find a suitable parking space.">
+        </div>
+        <div class="hotspot exterior-hotspot" id="hotspot-f_camera"
+             style="top: 33%; left: 36%;"
+             data-title="Top view camera"
+             data-info="One of the four cameras with which the system generates a representation that is shown on the infotainment system display. The cameras are located on the radiator grille, the exterior mirrors and the rear lid.">
+        </div>
+        <!-- ... (end of existing hotspots) ... -->
+   </div> <!-- Closing tag for exterior-interactive-area -->
 
+   
+   <!-- ================================= -->
+
+</div> <!-- === FIN EXTERIOR VIEW CONTAINER === -->
 
     <!-- ======================================================== -->
     <!-- === INTERIOR VIEW CONTAINER                          === -->
@@ -134,10 +121,11 @@
         <div id="interior-video-container">
             <video id="interior-video" width="100%" loop muted playsinline> <!-- Autoplay handled by JS -->
                 <source src="/Videos/interior.mp4" type="video/mp4">
-                Your browser does not support the video tag.
             </video>
         </div>
-
+        
+        <h3 class="video-subtitle">Discover the key interior features and specifications </h3>
+        <p class="video-subtitle-description">For more information ask TavasCAT</p>
         <!-- Interior Interactive Area -->
         <div id="interior-interactive-area">
             <img id="interior-image" src="Imatges/CupraInside.png" alt="Imagen detallada del interior del coche">
@@ -189,6 +177,39 @@
     <!-- FIN CONTENEDOR GATO -->
 
 </div> <!-- === FIN MAIN CONTENT CONTAINER === -->
+<!-- Contenedor Gato Ayudante -->
+<div id="cat-helper-container" class="hidden">
+    <!-- ... (contenido del gato sin cambios) ... -->
+</div>
+<!-- FIN CONTENEDOR GATO -->
+
+<!-- ============================================ -->
+<!-- === CONTENEDOR FIJO PARA MORE OPTIONS === -->
+<!-- ============================================ -->
+<div id="fixed-more-options-container" class="hidden"> <!-- Empieza oculto, gestionado por JS -->
+    <button id="more-options-trigger" class="more-options-button"> <!-- Podemos reutilizar la clase del botón si queremos -->
+        Still Curious?
+    </button>
+</div>
+<!-- ============================================ -->
+
+ <!-- ============================================ -->
+    <!-- === MODAL INTERFACE === -->
+    <!-- ============================================ -->
+    <div id="modal-overlay" class="hidden"></div> <!-- Fondo oscuro -->
+    <div id="info-modal" class="hidden">          <!-- Contenedor del modal -->
+        <div class="modal-content">
+            <button id="close-modal-button"></button> <!-- Botón de cierre -->
+            <h2 id="modal-title">Título Modal</h2>     <!-- Título (se cambiará por JS) -->
+            <p id="modal-subtitle" class="modal-subtitle-text">Open this link:</p> <!-- Subtítulo -->
+            <a href="https://www.dropbox.com/scl/fi/198aylex4k8u3c6rfir50/CUPRA_Tavascan_Owners_Manual_11_24_GB.pdf?rlkey=jukykpncqxeflpi5joq1avkcg&st=vm8wvf5r&dl=0" target="_blank" id="manual-link" class="manual-link-style">
+                View Manual (PDF)
+            </a>
+            <!-- <div id="modal-body">Aquí podría ir más contenido</div> -->
+        </div>
+    </div>
+    <!-- ============================================ -->
+
 
 <script src="script.js"></script> <!-- Load script at the end -->
 
