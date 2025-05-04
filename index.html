@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manual Interactivo Coche</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Optional: Include Roboto font if not already available -->
+    <!-- Optional: Include Roboto font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 </head>
 <body>
 <!-- === HEADER === -->
-<header class="cupra-header hidden"> <!-- Initially hidden until post-intro -->
+<header class="cupra-header hidden"> <!-- Initially hidden -->
     <div class="header-container">
         <div class="logo-container">
             <a href="/">
@@ -21,15 +21,15 @@
         </div>
         <!-- Nav buttons added by JS -->
         <div class="header-nav-buttons" id="header-nav">
-            <!-- Buttons like <button class="header-nav-button" data-view="exterior">Exterior</button> will be added here -->
+            <!-- Buttons are added here by script.js -->
         </div>
     </div>
 </header>
 <!-- === FIN HEADER === -->
 
 <!-- === INTRO VIDEO CONTAINER === -->
-<div id="intro-container">
-    <video id="intro-video" src="/Videos/tavascan.mp4" autoplay muted playsinline></video>
+<div id="intro-container"> <!-- Background image set here by JS on skip/end -->
+    <video id="intro-video" src="/Videos/tavascan.mp4" autoplay muted playsinline></video> <!-- Hidden via JS class after capture -->
     <div id="skip-controls-container">
         <button id="skip-intro-button">Skip Intro</button>
         <span id="skip-hint">or press Enter button</span>
@@ -38,7 +38,7 @@
 <!-- === FIN INTRO VIDEO CONTAINER === -->
 
 <!-- === POST-INTRO SCREEN === -->
-<div id="post-intro-screen" class="hidden">
+<div id="post-intro-screen" class="hidden"> <!-- Overlay shown after skip/end -->
     <div class="text-reveal-wrapper">
          <div class="reveal-static">Welcome</div>
          <div class="reveal-container">
@@ -48,7 +48,6 @@
     <p class="postintro-subtext">Dive into the Tavascan</p>
     <div class="postintro-button-container">
         <button id="start-button-left" class="start-button-postintro">Explore</button>
-        <!-- Add another button here if needed -->
     </div>
 </div>
 <!-- === FIN POST-INTRO SCREEN === -->
@@ -59,12 +58,12 @@
     <!-- ======================================================== -->
     <!-- === EXTERIOR VIEW CONTAINER                          === -->
     <!-- ======================================================== -->
-    <div id="exterior-view" class="view-container"> <!-- Default view, shown first -->
+    <div id="exterior-view" class="view-container hidden"> <!-- Start hidden, shown by JS -->
          <h1>Discover Every Curve: Tavascan Exterior</h1>
 
         <!-- Exterior Video -->
         <div id="exterior-video-container">
-            <video id="exterior-video" width="100%" autoplay loop muted playsinline>
+            <video id="exterior-video" width="100%" loop muted playsinline> <!-- Autoplay handled by JS -->
                 <source src="/Videos/exterior.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
@@ -73,23 +72,54 @@
         <!-- Exterior Interactive Area -->
         <div id="exterior-interactive-area">
             <img id="exterior-image" src="Imatges/linies_cotxe_sense_fons_retallada.png" alt="Imagen detallada del exterior del coche">
-             <!-- Hotspots for the EXTERIOR image -->
-             <div class="hotspot exterior-hotspot" id="hotspot-socket" style="top: 40%; left: 75%;" data-title="Charging socket"
-                data-info="The vehicle’s high-voltage battery can be charged using alternating current (AC) through the corresponding charging socket">
+
+            <!-- Hotspots for the EXTERIOR image -->
+            <!-- Using inline style for positioning -->
+            <!-- NOTE: Adjust these percentage values as needed -->
+
+             <div class="hotspot exterior-hotspot" id="hotspot-socket"
+                  style="top: 40%; left: 75%;"
+                  data-title="Charging socket"
+                  data-info="The vehicle’s high-voltage battery can be charged using alternating current (AC) through the corresponding charging socket.">
              </div>
-             <div class="hotspot exterior-hotspot" id="hotspot-rear_view" style="top: 53%; left: 92%;" data-title="Rear View Camera"
-                data-info="A camera on the rear bumper aids the driver when reverse parking or manoeuvring">
+             <div class="hotspot exterior-hotspot" id="hotspot-rear_view"
+                  style="top: 53%; left: 92%;"
+                  data-title="Rear View Camera"
+                  data-info="A camera on the rear bumper aids the driver when reverse parking or manoeuvring.">
              </div>
-             <div class="hotspot exterior-hotspot" id="hotspot-doors" style="top: 40%; left: 70%;" data-title="Doors"
-                data-info="The doors and rear lid can be locked manually and partially opened, for example if the key or the central locking is damaged">
+             <div class="hotspot exterior-hotspot" id="hotspot-doors"
+                  style="top: 40%; left: 70%;"
+                  data-title="Doors"
+                  data-info="The doors and rear lid can be locked manually and partially opened, for example if the key or the central locking is damaged.">
              </div>
-             <div class="hotspot exterior-hotspot" id="hotspot-park_assistor" style="top: 55%; left: 13%;" data-title="Park Assistor Sensor"
-                data-info="The automatic parking system is an additional function of ParkPilot and helps the driver find a suitable parking space from among the following types:">
+             <div class="hotspot exterior-hotspot" id="hotspot-park_assistor"
+                  style="top: 55%; left: 13%;"
+                  data-title="Park Assistor Sensor"
+                  data-info="The automatic parking system is an additional function of ParkPilot and helps the driver find a suitable parking space.">
              </div>
-             <div class="hotspot exterior-hotspot" id="hotspot-f_camera" style="top: 33%; left: 36%;" data-title="Top view camera"
-                data-info="One of the four cameras with which the system generates a representation that is shown on the infotainment system display. The cameras are located on the radiator grille, the exterior mirrors and the rear lid">
+             <div class="hotspot exterior-hotspot" id="hotspot-f_camera"
+                  style="top: 33%; left: 36%;"
+                  data-title="Top view camera"
+                  data-info="One of the four cameras with which the system generates a representation that is shown on the infotainment system display. The cameras are located on the radiator grille, the exterior mirrors and the rear lid.">
              </div>
-             <!-- Add more exterior hotspots as needed -->
+
+             <!-- ======== EXTERIOR HOTSPOT TEMPLATE ======== -->
+             <!-- To add a new exterior hotspot:
+                  1. Copy the div below.
+                  2. Give it a unique `id`.
+                  3. Set `style="top: XX%; left: YY%;"` adjusting XX and YY percentages.
+                  4. Update `data-title` and `data-info`.
+                  5. Make sure it has BOTH `hotspot` and `exterior-hotspot` classes.
+             -->
+             <!--
+             <div class="hotspot exterior-hotspot" id="new-exterior-hotspot-id"
+                  style="top: 60%; left: 50%;"
+                  data-title="New Feature Title"
+                  data-info="Description of the new exterior feature.">
+             </div>
+             -->
+             <!-- ========================================== -->
+
         </div>
     </div> <!-- === FIN EXTERIOR VIEW CONTAINER === -->
 
@@ -102,7 +132,7 @@
 
         <!-- Interior Video -->
         <div id="interior-video-container">
-            <video id="interior-video" width="100%" autoplay loop muted playsinline>
+            <video id="interior-video" width="100%" loop muted playsinline> <!-- Autoplay handled by JS -->
                 <source src="/Videos/interior.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
@@ -112,16 +142,33 @@
         <div id="interior-interactive-area">
             <img id="interior-image" src="Imatges/CupraInside.png" alt="Imagen detallada del interior del coche">
             <!-- Hotspots for the INTERIOR image -->
-            <div class="hotspot interior-hotspot" style="top: 50%; left: 50%;" data-title="Infotainment Screen"
-                data-info="Central display for navigation, media, vehicle settings, and connectivity features.">
+            <!-- Using inline style for positioning -->
+            <!-- NOTE: Adjust these percentage values as needed -->
+            <div class="hotspot interior-hotspot" id="hotspot-infotainment"
+                 data-title="Infotainment Screen"
+                 data-info="The infotainment system brings together important vehicle functions and systems into a single central control unit, e.g. air conditioning, menu settings, radio equipment and the navigation system.">
             </div>
-             <div class="hotspot interior-hotspot" style="top: 65%; left: 30%;" data-title="Steering Wheel Controls"
-                data-info="Buttons for controlling audio, phone calls, cruise control, and driver assistance systems.">
+             <div class="hotspot interior-hotspot" id="hotspot-hazard_lights"
+                 data-title="Hazard Warning Lights"
+                 data-info="The hazard warning lights are used to draw the attention of other road users to your vehicle in emergencies.">
             </div>
-             <div class="hotspot interior-hotspot" style="top: 75%; left: 55%;" data-title="Center Console"
-                data-info="Includes gear selector, driving mode selection, and storage compartments.">
+             <div class="hotspot interior-hotspot" id="hotspot-steering"
+                 data-title="Multifunction Steering Wheel"
+                 data-info="The steering wheel includes multifunction modules from where it is possible to control the audio, telephone, navigation, voice control and assist functions without the driver needing to be distracted from the road.">
             </div>
-             <!-- Add more interior hotspots as needed -->
+            <div class="hotspot interior-hotspot" id="hotspot-cockpit"
+                 data-title="Digital Cockpit"
+                 data-info="The Digital Cockpit is a digital instrument cluster with a high-resolution colour liquid crystal display. In addition to the speedometer, by selecting different information profiles you can display information from the driver assistant systems, among other things. From here on the Digital Cockpit will be referred to as the “digital instrument cluster“.">
+            </div>
+             <!-- ======== INTERIOR HOTSPOT TEMPLATE ======== -->
+             <!-- To add a new interior hotspot:
+                  1. Copy the div structure from above.
+                  2. Give it a unique `id`.
+                  3. Set `style="top: XX%; left: YY%;"` adjusting XX and YY percentages.
+                  4. Update `data-title` and `data-info`.
+                  5. Make sure it has BOTH `hotspot` and `interior-hotspot` classes.
+             -->
+             <!-- ========================================== -->
         </div>
     </div> <!-- === FIN INTERIOR VIEW CONTAINER === -->
 
@@ -135,7 +182,7 @@
         </div>
         <img id="cat-helper-image" src="Imatges/Tavascat.png" alt="Gato ayudante">
         <div id="cat-input-area">
-            <input type="text" id="cat-question-input" placeholder="Ask Tavascat...">
+            <input type="text" id="cat-question-input" placeholder="Ask TavasCAT...">
             <button id="ask-cat-button">Send</button>
         </div>
     </div>
@@ -143,4 +190,7 @@
 
 </div> <!-- === FIN MAIN CONTENT CONTAINER === -->
 
-<script src="script.js"></script>
+<script src="script.js"></script> <!-- Load script at the end -->
+
+</body>
+</html>
