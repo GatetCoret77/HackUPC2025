@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,121 +10,137 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 </head>
-
 <body>
-
-    <!-- === HEADER === -->
-    <header class="cupra-header">
-        <div class="header-container">
-            <div class="logo-container">
-                <a href="/">
-                    <img src="Imatges/CupraLogo.jpg" alt="Cupra Logo">
-                </a>
-            </div>
-            <!-- Nav buttons added by JS -->
+<!-- === HEADER === -->
+<header class="cupra-header hidden"> <!-- Initially hidden until post-intro -->
+    <div class="header-container">
+        <div class="logo-container">
+            <a href="/">
+                <img src="Imatges/CupraLogo.jpg" alt="Cupra Logo">
+            </a>
         </div>
-    </header>
-    <!-- === FIN HEADER === -->
-
-    <!-- === INTRO VIDEO CONTAINER === -->
-    <div id="intro-container">
-        <video id="intro-video" src="/Videos/tavascan.mp4" autoplay muted playsinline></video>
-        <div id="skip-controls-container">
-            <button id="skip-intro-button">Skip Intro</button>
-            <span id="skip-hint">or press Enter button</span>
+        <!-- Nav buttons added by JS -->
+        <div class="header-nav-buttons" id="header-nav">
+            <!-- Buttons like <button class="header-nav-button" data-view="exterior">Exterior</button> will be added here -->
         </div>
     </div>
-    <!-- === FIN INTRO VIDEO CONTAINER === -->
+</header>
+<!-- === FIN HEADER === -->
 
-    <!-- === POST-INTRO SCREEN === -->
-    <div id="post-intro-screen" class="hidden">
-        <div class="text-reveal-wrapper">
-             <div class="reveal-static">Welcome</div>
-             <div class="reveal-container">
-               <span class="reveal-sliding">to your <span style="font-weight: bold;">Cupra Tavascan</span></span>
+<!-- === INTRO VIDEO CONTAINER === -->
+<div id="intro-container">
+    <video id="intro-video" src="/Videos/tavascan.mp4" autoplay muted playsinline></video>
+    <div id="skip-controls-container">
+        <button id="skip-intro-button">Skip Intro</button>
+        <span id="skip-hint">or press Enter button</span>
+    </div>
+</div>
+<!-- === FIN INTRO VIDEO CONTAINER === -->
+
+<!-- === POST-INTRO SCREEN === -->
+<div id="post-intro-screen" class="hidden">
+    <div class="text-reveal-wrapper">
+         <div class="reveal-static">Welcome</div>
+         <div class="reveal-container">
+           <span class="reveal-sliding">to your <span style="font-weight: bold;">Cupra Tavascan</span></span>
+         </div>
+    </div>
+    <p class="postintro-subtext">Dive into the Tavascan</p>
+    <div class="postintro-button-container">
+        <button id="start-button-left" class="start-button-postintro">Explore</button>
+        <!-- Add another button here if needed -->
+    </div>
+</div>
+<!-- === FIN POST-INTRO SCREEN === -->
+
+<!-- === MAIN CONTENT CONTAINER === -->
+<div id="main-content" class="hidden">
+
+    <!-- ======================================================== -->
+    <!-- === EXTERIOR VIEW CONTAINER                          === -->
+    <!-- ======================================================== -->
+    <div id="exterior-view" class="view-container"> <!-- Default view, shown first -->
+         <h1>Discover Every Curve: Tavascan Exterior</h1>
+
+        <!-- Exterior Video -->
+        <div id="exterior-video-container">
+            <video id="exterior-video" width="100%" autoplay loop muted playsinline>
+                <source src="/Videos/exterior.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Exterior Interactive Area -->
+        <div id="exterior-interactive-area">
+            <img id="exterior-image" src="Imatges/linies_cotxe_sense_fons_retallada.png" alt="Imagen detallada del exterior del coche">
+             <!-- Hotspots for the EXTERIOR image -->
+             <div class="hotspot exterior-hotspot" id="hotspot-socket" style="top: 40%; left: 75%;" data-title="Charging socket"
+                data-info="The vehicle’s high-voltage battery can be charged using alternating current (AC) through the corresponding charging socket">
              </div>
+             <div class="hotspot exterior-hotspot" id="hotspot-rear_view" style="top: 53%; left: 92%;" data-title="Rear View Camera"
+                data-info="A camera on the rear bumper aids the driver when reverse parking or manoeuvring">
+             </div>
+             <div class="hotspot exterior-hotspot" id="hotspot-doors" style="top: 40%; left: 70%;" data-title="Doors"
+                data-info="The doors and rear lid can be locked manually and partially opened, for example if the key or the central locking is damaged">
+             </div>
+             <div class="hotspot exterior-hotspot" id="hotspot-park_assistor" style="top: 55%; left: 13%;" data-title="Park Assistor Sensor"
+                data-info="The automatic parking system is an additional function of ParkPilot and helps the driver find a suitable parking space from among the following types:">
+             </div>
+             <div class="hotspot exterior-hotspot" id="hotspot-f_camera" style="top: 33%; left: 36%;" data-title="Top view camera"
+                data-info="One of the four cameras with which the system generates a representation that is shown on the infotainment system display. The cameras are located on the radiator grille, the exterior mirrors and the rear lid">
+             </div>
+             <!-- Add more exterior hotspots as needed -->
         </div>
-        <p class="postintro-subtext">Dive into the Tavascan</p>
-        <div class="postintro-button-container">
-            <button id="start-button-left" class="start-button-postintro">Explore</button>
+    </div> <!-- === FIN EXTERIOR VIEW CONTAINER === -->
+
+
+    <!-- ======================================================== -->
+    <!-- === INTERIOR VIEW CONTAINER                          === -->
+    <!-- ======================================================== -->
+    <div id="interior-view" class="view-container hidden"> <!-- Initially hidden -->
+         <h1>Immerse Yourself Inside: Tavascan Interior</h1>
+
+        <!-- Interior Video -->
+        <div id="interior-video-container">
+            <video id="interior-video" width="100%" autoplay loop muted playsinline>
+                <source src="/Videos/interior.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Interior Interactive Area -->
+        <div id="interior-interactive-area">
+            <img id="interior-image" src="Imatges/CupraInside.png" alt="Imagen detallada del interior del coche">
+            <!-- Hotspots for the INTERIOR image -->
+            <div class="hotspot interior-hotspot" style="top: 50%; left: 50%;" data-title="Infotainment Screen"
+                data-info="Central display for navigation, media, vehicle settings, and connectivity features.">
+            </div>
+             <div class="hotspot interior-hotspot" style="top: 65%; left: 30%;" data-title="Steering Wheel Controls"
+                data-info="Buttons for controlling audio, phone calls, cruise control, and driver assistance systems.">
+            </div>
+             <div class="hotspot interior-hotspot" style="top: 75%; left: 55%;" data-title="Center Console"
+                data-info="Includes gear selector, driving mode selection, and storage compartments.">
+            </div>
+             <!-- Add more interior hotspots as needed -->
+        </div>
+    </div> <!-- === FIN INTERIOR VIEW CONTAINER === -->
+
+
+    <!-- Contenedor Gato Ayudante -->
+    <div id="cat-helper-container" class="hidden"> <!-- Initially hidden -->
+        <div id="info-popup" class="hidden"> <!-- Popup for hotspots AND cat -->
+            <button id="close-popup"></button>
+            <h2 id="popup-title">Título</h2>
+            <p id="popup-info">Información...</p>
+        </div>
+        <img id="cat-helper-image" src="Imatges/Tavascat.png" alt="Gato ayudante">
+        <div id="cat-input-area">
+            <input type="text" id="cat-question-input" placeholder="Ask Tavascat...">
+            <button id="ask-cat-button">Send</button>
         </div>
     </div>
-    <!-- === FIN POST-INTRO SCREEN === -->
+    <!-- FIN CONTENEDOR GATO -->
 
-    <!-- === MAIN CONTENT CONTAINER === -->
-    <div id="main-content" class="hidden">
+</div> <!-- === FIN MAIN CONTENT CONTAINER === -->
 
-        <!-- ======================================================== -->
-        <!-- === EXTERIOR VIEW CONTAINER (Shows INT image + EXT video) === -->
-        <!-- This is SHOWN when the "Exterior" button is ACTIVE   -->
-        <!-- ======================================================== -->
-        <div id="exterior-view" class="view-container">
-             <!-- Title reflects the content shown -->
-            <h1>Discover Every Curve: Tavascan Exterior</h1>
-
-            <!-- Exterior Video (as requested for this view) -->
-            <div id="exterior-video-container">
-                <video id="exterior-video" width="100%" autoplay loop muted playsinline>
-                    <source src="/Videos/exterior.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-
-            <!--NONONONOONO AIXO ES EXTERIOR ** SWAPPED ** Interior Interactive Area (Now inside Exterior View) -->
-            <div id="interior-interactive-area">
-                <!-- Interior Image (as requested for this view) -->
-                <img id="interior-image" src="Imatges/linies_cotxe_sense_fons_retallada.png" alt="Imagen detallada del exterior del coche">
-                 <!-- Hotspots for the interior image -->
-                 <div class="hotspot interior-hotspot" id="hotspot-socket" data-title="Charging socket" data-info="The vehicle’s high-voltage battery can be charged using alternating current (AC) through the corresponding charging socket."></div>
-                 <div class="hotspot interior-hotspot" id="hotspot-rear_view" data-title="Rear View Camera" data-info="A camera on the rear bumper aids the driver when reverse parking or manoeuvring"></div>
-                 <div class="hotspot interior-hotspot" id="hotspot-clima" data-title="Controles Climatizador" data-info="Ajusta la temperatura, velocidad del ventilador, dirección del aire y activa el aire acondicionado (A/C) o la calefacción."></div>
-                 <div class="hotspot interior-hotspot" id="hotspot-emergencia" data-title="Luces de Emergencia" data-info="Activa todas las luces intermitentes simultáneamente para señalizar una emergencia o detención peligrosa. Botón con triángulo rojo."></div>
-            </div>
-        </div> <!-- === FIN EXTERIOR VIEW CONTAINER === -->
-
-
-        <!-- ======================================================== -->
-        <!-- === INTERIOR VIEW CONTAINER (Shows EXT image + INT video) === -->
-        <!-- This is SHOWN when the "Interior" button is ACTIVE   -->
-        <!-- ======================================================== -->
-        <div id="interior-view" class="view-container hidden">
-             <!-- Title reflects the content shown -->
-            <h1>Immerse Yourself Inside: Tavascan Interior</h1>
-
-            <!-- Interior Video (as requested for this view) -->
-            <div id="interior-video-container">
-                <video id="interior-video" width="100%" autoplay loop muted playsinline>
-                    <source src="/Videos/interior.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-
-            <!-- NONONONONO ES INTERIOR ** SWAPPED ** Exterior Interactive Area (Now inside Interior View) -->
-            <div id="exterior-interactive-area">
-                <!-- Exterior Image (as requested for this view) -->
-                <img id="exterior-image" src="Imatges/CupraInside.png" alt="Imagen detallada del interior del coche">
-                <!-- No hotspots here currently, add exterior ones later if needed -->
-            </div>
-        </div> <!-- === FIN INTERIOR VIEW CONTAINER === -->
-
-
-        <!-- Contenedor Gato Ayudante (Remains the same) -->
-        <div id="cat-helper-container" class="hidden">
-            <div id="info-popup" class="hidden">
-                <button id="close-popup"></button>
-                <h2 id="popup-title">Título</h2>
-                <p id="popup-info">Información...</p>
-            </div>
-            <img id="cat-helper-image" src="Imatges/Tavascat.png" alt="Gato ayudante">
-            <div id="cat-input-area">
-                <input type="text" id="cat-question-input" placeholder="Pregúntale al gato...">
-                <button id="ask-cat-button">Enviar</button>
-            </div>
-        </div>
-        <!-- FIN CONTENEDOR GATO -->
-
-    </div> <!-- === FIN MAIN CONTENT CONTAINER === -->
-
-    <script src="script.js"></script>
-</body>
-</html>
+<script src="script.js"></script>
