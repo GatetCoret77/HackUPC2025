@@ -1,4 +1,4 @@
-/* --- Fuentes --- */
+/* --- Fuentes --- 
 @font-face {
     font-family: 'Poppins';
     src: url('/fonts/poppins-regular.woff2') format('woff2'),
@@ -11,8 +11,8 @@
         url('/fonts/poppins-bold.woff') format('woff');
     font-weight: 700; font-style: normal; font-display: swap;
 }
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+*/
 
 /* --- Estilos Generales y Reset --- */
 body {
@@ -173,7 +173,7 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
     margin-top: 20px;
     margin-bottom: 25px;
     color: #ffffff;
-    font-family: 'Poppins', sans-serif;
+    
 }
 /* --- Styles for Subtitle Below Videos --- */
 .video-subtitle {
@@ -184,8 +184,6 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
     margin-top: 90px;       /* Margen SUPERIOR: Espacio entre el video y "Hola" */
     margin-bottom: 40px;    /* Margen INFERIOR: Espacio entre "Hola" y el área interactiva */
     /* Puedes añadir más estilos si quieres (font-family, etc.) */
-    font-weight: 700;
-    font-family: 'Poppins', sans-serif;
 }
 
 .video-subtitle-description {
@@ -196,7 +194,6 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
     margin-top: 0;          /* Quita el espacio superior por defecto del párrafo */
     padding: 0 15px;        /* Un poco de padding lateral por si el texto es largo */
     line-height: 1.4;       /* Espacio entre líneas si el texto ocupa más de una */
-    font-family: 'Poppins', sans-serif;
 }
 #exterior-view .video-subtitle-description {
     margin-bottom: 10px; /* Ajusta este valor para el exterior */
@@ -347,7 +344,6 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
     z-index: 1020; /* Por encima del overlay */
     min-width: 300px; /* Ancho mínimo */
     max-width: 90%;   /* Ancho máximo */
-    font-family: 'Poppins', sans-serif;
     /* La clase .hidden (definida arriba) lo oculta inicialmente */
     /* Añadimos transición si queremos fade in/out (requiere ajustar .hidden) */
     /* transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; */
@@ -363,8 +359,6 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
     font-size: 1.4em;
     color: #333;
     text-align: center;
-    font-family: 'Poppins', sans-serif; 
-    font-weight: 700;
 }
 .modal-subtitle-text { /* Usamos la clase que añadimos */
     font-size: 0.9em;     /* Letra más pequeña que el título */
@@ -373,7 +367,6 @@ button { background: none; border: none; padding: 0; cursor: pointer; font-famil
     margin-top: 0;        /* Quitamos el margen superior por defecto del párrafo */
     margin-bottom: 20px;  /* Espacio debajo del subtítulo */
     font-weight: 400;     /* Puedes ajustar el peso si quieres */
-    font-family: 'Poppins', sans-serif;
 }
 
 .manual-link-style {
@@ -479,7 +472,7 @@ body.modal-open {
 }
 #info-popup:not(.hidden) { opacity: 1; visibility: visible; transform: scale(1) translateY(0); pointer-events: auto; }
 #info-popup::after { /* Popup tail */ content: ''; position: absolute; bottom: -10px; left: 30px; width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 10px solid #ffffff; }
-#info-popup h2 { margin-top: 0; margin-bottom: 10px; color: #333; font-size: 1.1em; font-family: 'Poppins', sans-serif;}
+#info-popup h2 { margin-top: 0; margin-bottom: 10px; color: #333; font-size: 1.1em; }
 
 /* Popup Info Paragraph Style */
 #info-popup p {
